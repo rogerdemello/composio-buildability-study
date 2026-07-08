@@ -315,7 +315,7 @@ footer .sig{margin-top:20px;font-size:12px;color:var(--faint);font-family:var(--
   <div class="two">
     <div class="card"><h3 style="margin-bottom:14px">Pipeline</h3><div class="pipe">
       <div class="stage"><div class="ic">P</div><div class="body"><h4>Providers</h4><p><b>Composio search</b> → Tavily → Firecrawl → plain fetch, in preference order. Playwright <code>browser</code> is a fallback, invoked only when a page is JS-walled or the verifier flags an inconsistency.</p></div></div>
-      <div class="stage"><div class="ic">1</div><div class="body"><h4>Researcher · <code>agents/researcher.py</code></h4><p>Gathers docs, then forces a structured record where <b>every field carries its own value + confidence + evidence URL</b>. Ran async under a <code>Semaphore(5)</code> across 10 categories.</p></div></div>
+      <div class="stage"><div class="ic">1</div><div class="body"><h4>Researcher · <code>agents/researcher.py</code></h4><p>Gathers docs, then forces a structured record where <b>every field carries its own value + confidence + evidence URL</b>. Runs async under a <code>Semaphore(5)</code>. For this submission the same structure ran as Claude Code web-search sub-agents across the 10 categories — see the honesty note below.</p></div></div>
       <div class="stage"><div class="ic">2</div><div class="body"><h4>Verifier · <code>agents/verifier.py</code></h4><p>A <b>different, stronger model</b> with an adversarial prompt re-researches a sample and diffs it; every evidence URL is fetched for a live 200. Sets each field's PASS/FAIL/UNKNOWN.</p></div></div>
       <div class="stage"><div class="ic">3</div><div class="body"><h4>Pattern engine · <code>agents/pattern_analyzer.py</code></h4><p>Feeds the whole dataset to an LLM for the insights up top — grounded in code-computed counts so it can't invent a number.</p></div></div>
       <div class="stage"><div class="ic">4</div><div class="body"><h4>Report · <code>agents/report_writer.py</code></h4><p>Renders this page straight from JSON. Nothing here is hand-written.</p></div></div>
@@ -326,6 +326,12 @@ footer .sig{margin-top:20px;font-size:12px;color:var(--faint);font-family:var(--
       <li><b>Composio catalog stubs</b> — a toolkit <i>page</i> with 0 tools is not real coverage; a human distinguished "listed" from "usable".</li>
       <li><b>Access reclassification</b> — the score exposed apps the agent hedged as "moderate" that were really gated (SFCC, Brex) or really self-serve; a human set the access value the score keys off.</li>
     </ul></div>
+  </div>
+  <div class="card" style="border-left:3px solid var(--warn);margin-top:16px">
+    <h3 style="color:var(--warn)">⚑ Honesty — what actually ran on Composio</h3>
+    <p style="font-size:13px;color:var(--muted);line-height:1.55;margin:8px 0 0">
+      The pipeline in the repo (<code style="font-family:var(--mono);font-size:11.5px">providers/composio_search.py</code> + <code style="font-family:var(--mono);font-size:11.5px">agents/researcher.py</code>) is built to research each app with <b style="color:var(--ink)">Composio's own <code style="font-family:var(--mono);font-size:11.5px">COMPOSIO_SEARCH</code> tools</b> via the Composio SDK/MCP — that code is committed and runnable. For <b style="color:var(--ink)">this</b> submission the 100-app dataset was produced by the <b style="color:var(--ink)">same agent structure running inside Claude Code</b> (WebSearch/WebFetch sub-agents: 10 category researchers + 4 independent auditors) against the identical schema — not by the Composio path. The Composio MCP server is registered; a live Composio-powered run is one auth step away (AuthKit OAuth, or a Composio project API key for the SDK path). We flag this rather than imply Composio produced the numbers.
+    </p>
   </div>
 </div></section>
 

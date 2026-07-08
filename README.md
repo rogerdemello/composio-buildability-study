@@ -136,6 +136,7 @@ python main.py md                    # 6. render CASE_STUDY.md
 > `research`/`verify` refreshes them live.
 
 ## Honesty notes
+- **What ran on Composio:** the pipeline (`providers/composio_search.py` + `agents/researcher.py`) is *built* to research via Composio's `COMPOSIO_SEARCH` tools over the SDK/MCP, and that code is committed and runnable. The **committed 100-app dataset**, however, was produced by the *same agent structure running inside Claude Code* (WebSearch/WebFetch sub-agents) against the identical schema — **not** by the Composio path. The Composio MCP server is registered (`claude mcp add … composio …`); a live Composio run needs one auth step (AuthKit OAuth for MCP, or a Composio **project** API key for the SDK path — note the MCP *consumer* key is not accepted by the REST/SDK API). Flagged here, not blurred.
 - No paid accounts were used. A payment/partnership gate reported with evidence *is* the finding, not a failure.
 - Confidence is per-field and visible in every provenance popup; lower-confidence values are dotted amber.
 - Verification graded 80 input fields on a 20-app stratified sample — the accuracy number is the sample's.
