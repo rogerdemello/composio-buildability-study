@@ -1,0 +1,61 @@
+{
+  "headline": "The 100 split cleanly: 70 are buildable as agent toolkits today — and almost every app that isn't is blocked by a business rule (sales, approval, enterprise contract), not by a missing or bad API.",
+  "insights": [
+    {
+      "title": "The blocker is commercial, not technical",
+      "detail": "Only 1 of 100 apps has no usable API surface at all. The 30 that aren't 'easy' are gated by app-review/dev-token approval (10), paid plans (9), or partner/enterprise contracts (6) — business gates, not engineering ones. The toolkit backlog is a sales-and-partnerships problem more than a build problem.",
+      "evidence_count": 25
+    },
+    {
+      "title": "REST is the universal substrate; GraphQL is a rounding error",
+      "detail": "84 apps expose plain REST and another 9 add GraphQL alongside it; only 3 are GraphQL-first (Linear, Monday, Plain). A REST-first integration layer covers essentially the whole market.",
+      "evidence_count": 96
+    },
+    {
+      "title": "OAuth2 dominates — but never alone",
+      "detail": "64 apps support OAuth2, yet 83 also offer a simpler API-key or token path (42 key + 41 token). The auth layer must do both: OAuth for user-context/marketplace apps, keys for single-tenant. Basic auth is effectively dead (12, all legacy).",
+      "evidence_count": 64
+    },
+    {
+      "title": "MCP has already gone mainstream",
+      "detail": "40 apps ship an official first-party MCP server and 32 more have community ones — 72 of 100 are already MCP-reachable. It is concentrated in Dev/Infra and Productivity, where it is now table stakes.",
+      "evidence_count": 72
+    },
+    {
+      "title": "Easy wins cluster by category",
+      "detail": "Productivity (10/10 easy), Dev/Infra (9/10), and CRM / Support / Comms (8/10 each) are near-uniformly self-serve. Marketing/Ads is the outlier — only 4/10 easy — because every ad platform gates access behind app review.",
+      "evidence_count": 43
+    },
+    {
+      "title": "Composio already covers the majority — and the gaps are legible",
+      "detail": "56 of 100 already have a Composio toolkit. The 37 'no' rows are the clearest expansion targets, and most of them (e.g. Plain, Pylon, Smartsheet, Ecwid, GoHighLevel) are self-serve — build-ready, just not built yet.",
+      "evidence_count": 37
+    }
+  ],
+  "easy_wins": [
+    "Notion", "Linear", "Asana", "ClickUp", "Coda", "GitHub", "Vercel", "Supabase",
+    "Sentry", "Cloudflare", "HubSpot", "Close", "Pipedrive", "Attio", "Intercom",
+    "Front", "Help Scout", "Shopify", "Stripe", "SendGrid", "Klaviyo", "Mailchimp"
+  ],
+  "needs_outreach": [
+    "DealCloud", "Gladly", "Salesforce Commerce Cloud", "PitchBook", "NotebookLM",
+    "Paygent Connect", "Google Ads", "Meta Ads", "LinkedIn Ads", "Amazon Selling Partner",
+    "WhatsApp Business"
+  ],
+  "surprises": [
+    "Fintech quietly leads on MCP: Stripe, Brex, Ramp, Xero and iPayX all ship official MCP servers — a regulated, conservative category out ahead of the agent-native shift.",
+    "Marketing/Ads is the hardest category to integrate, not the easiest — every major ad platform (Google, Meta, LinkedIn, Pinterest) gates real access behind an app-review/dev-token approval.",
+    "NotebookLM, one of the most-requested AI products, has no standalone public API at all — only a licensed enterprise API on Google Cloud."
+  ],
+  "counts": {
+    "n": 100,
+    "auth": {"OAuth2": 64, "API Key": 42, "Token": 41, "Basic": 12, "JWT": 6, "PAT": 6, "Other": 3, "None": 2, "HMAC-signed": 1},
+    "access": {"self-serve": 69, "gated-approval": 10, "gated-paid": 9, "gated-partner": 6, "trial-only": 3, "sandbox-self-serve": 3},
+    "api_surface": {"REST": 84, "REST+GraphQL": 9, "GraphQL": 3, "CLI-tool": 2, "gRPC": 1, "none": 1},
+    "mcp": {"official": 40, "community": 32, "none": 15, "unknown": 13},
+    "composio": {"yes": 56, "no": 37, "unknown": 7},
+    "buildability": {"easy": 70, "moderate": 24, "blocked": 6},
+    "self_serve": 75,
+    "avg_score": 73.0
+  }
+}

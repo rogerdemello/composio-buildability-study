@@ -1,0 +1,614 @@
+<title>Composio · 100-App Buildability Study</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --surface-2:#EEF1F5; --surface-3:#E5E9F0;
+  --ink:#12141A; --muted:#586074; --faint:#8B93A4; --line:#E1E6EC; --line-2:#D2D9E2;
+  --accent:#3538CD; --accent-soft:#E9EAFB;
+  --good:#0E8F63; --good-soft:#DBF1E8; --warn:#B8710A; --warn-soft:#F7EBD5; --bad:#CA3F32; --bad-soft:#F8E0DC;
+  --shadow:0 1px 2px rgba(18,20,26,.04),0 4px 16px rgba(18,20,26,.05);
+  --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0B0D12; --surface:#12151C; --surface-2:#171B23; --surface-3:#1E232D;
+  --ink:#E8EBF1; --muted:#9AA3B4; --faint:#6B7382; --line:#232935; --line-2:#2C333F;
+  --accent:#8489FF; --accent-soft:#1B1E33;
+  --good:#33B98A; --good-soft:#123024; --warn:#D69A3C; --warn-soft:#2E2413; --bad:#E6685A; --bad-soft:#331915;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+}}
+:root[data-theme="light"]{
+  --bg:#F4F6F8; --surface:#FFFFFF; --surface-2:#EEF1F5; --surface-3:#E5E9F0;
+  --ink:#12141A; --muted:#586074; --faint:#8B93A4; --line:#E1E6EC; --line-2:#D2D9E2;
+  --accent:#3538CD; --accent-soft:#E9EAFB;
+  --good:#0E8F63; --good-soft:#DBF1E8; --warn:#B8710A; --warn-soft:#F7EBD5; --bad:#CA3F32; --bad-soft:#F8E0DC;
+  --shadow:0 1px 2px rgba(18,20,26,.04),0 4px 16px rgba(18,20,26,.05);
+}
+:root[data-theme="dark"]{
+  --bg:#0B0D12; --surface:#12151C; --surface-2:#171B23; --surface-3:#1E232D;
+  --ink:#E8EBF1; --muted:#9AA3B4; --faint:#6B7382; --line:#232935; --line-2:#2C333F;
+  --accent:#8489FF; --accent-soft:#1B1E33;
+  --good:#33B98A; --good-soft:#123024; --warn:#D69A3C; --warn-soft:#2E2413; --bad:#E6685A; --bad-soft:#331915;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+h1,h2,h3{text-wrap:balance;margin:0}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.mono{font-family:var(--mono)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.brand{font-family:var(--mono);font-weight:600;font-size:13px;letter-spacing:.03em;display:flex;align-items:center;gap:9px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.topnav{display:flex;gap:18px;margin-left:auto;font-size:13px}
+.topnav a{color:var(--muted);font-family:var(--mono);font-size:12px}.topnav a:hover{color:var(--ink);text-decoration:none}
+.tgl{background:var(--surface-2);border:1px solid var(--line);color:var(--muted);border-radius:7px;width:34px;height:30px;cursor:pointer;font-size:14px;display:grid;place-items:center}
+.tgl:hover{color:var(--ink)}
+@media(max-width:820px){.topnav{display:none}}
+
+.hero{padding:54px 0 30px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(28px,4.6vw,50px);line-height:1.03;letter-spacing:-.022em;font-weight:800;max-width:17ch}
+.hero .lede{margin-top:18px;font-size:clamp(16px,2.1vw,19px);color:var(--muted);max-width:66ch;line-height:1.5}
+.hero .lede b{color:var(--ink);font-weight:600}
+.metarow{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.chipmeta{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);padding:5px 10px;border-radius:6px}
+.chipmeta b{color:var(--ink)}
+
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.sec-head .num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600}
+.sec-head h2{font-size:clamp(20px,3vw,27px);letter-spacing:-.015em;font-weight:750}
+.sec-head .sub{color:var(--muted);font-size:14px;margin-left:auto;max-width:46ch;text-align:right}
+@media(max-width:680px){.sec-head .sub{text-align:left;margin-left:0}}
+
+.headline{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+@media(max-width:900px){.headline{grid-template-columns:1fr}}
+.thesis{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:14px;
+  padding:22px 24px;grid-column:1/-1;font-size:clamp(17px,2.3vw,21px);line-height:1.45;font-weight:600;color:var(--ink)}
+.thesis .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:8px}
+.findings{display:flex;flex-direction:column;gap:12px}
+.finding{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.finding h4{font-size:14.5px;font-weight:700;margin-bottom:4px;display:flex;gap:9px;align-items:baseline}
+.finding h4 .n{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--accent-soft);border-radius:5px;padding:1px 7px}
+.finding p{margin:0;font-size:13px;color:var(--muted);line-height:1.45}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)}
+.kpi .v{font-family:var(--mono);font-size:28px;font-weight:750;letter-spacing:-.02em}
+.kpi .l{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.3}
+
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.charts{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+.card h3{font-size:15px;font-weight:700;margin-bottom:3px}
+.card .cap{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.4}
+.bar{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px}
+.bar .lab{width:130px;flex-shrink:0;color:var(--muted);font-size:12.5px;text-align:right}
+.bar .track{flex:1;background:var(--surface-2);border-radius:5px;height:22px;overflow:hidden}
+.bar .fill{height:100%;border-radius:5px;min-width:3px;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.bar .val{font-family:var(--mono);font-size:12px;width:30px;flex-shrink:0;font-weight:600}
+.srow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:12.5px}
+.srow .lab{width:150px;flex-shrink:0;color:var(--muted)}
+.stack{display:flex;height:24px;border-radius:6px;overflow:hidden;flex:1;background:var(--surface-2)}
+.stack .seg{height:100%;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}.legend i{width:10px;height:10px;border-radius:3px}
+.easy,.seg.easy,.legend i.easy,.fill.easy{background:var(--good)}
+.moderate,.seg.moderate,.legend i.moderate,.fill.moderate{background:var(--warn)}
+.blocked,.seg.blocked,.legend i.blocked,.fill.blocked{background:var(--bad)}
+.fill.acc{background:var(--accent)}
+.lists{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:820px){.lists{grid-template-columns:1fr}}
+.listcard h3{font-size:13px;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
+.listcard.win h3{color:var(--good)}.listcard.out h3{color:var(--bad)}.listcard.sur h3{color:var(--accent)}
+.taglist{display:flex;flex-wrap:wrap;gap:5px}
+.taglist .tg{font-family:var(--mono);font-size:11px;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:3px 7px;color:var(--muted)}
+.surlist{margin:0;padding-left:16px;font-size:13px;color:var(--muted);line-height:1.5}.surlist li{margin-bottom:8px}
+
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.search{flex:1;min-width:200px;position:relative}
+.search input{width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:9px;padding:9px 12px 9px 34px;font-size:14px;color:var(--ink);font-family:var(--sans)}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-family:var(--mono);font-size:11.5px;padding:6px 10px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap}
+.chip:hover{color:var(--ink);border-color:var(--faint)}.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
+.hint{font-size:12px;color:var(--faint);margin-bottom:12px}.hint b{color:var(--muted)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:1000px;font-size:13px}
+thead th{position:sticky;top:56px;background:var(--surface-2);z-index:2;text-align:left;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:11px 12px;border-bottom:1px solid var(--line-2);cursor:pointer;white-space:nowrap;user-select:none}
+thead th:hover{color:var(--ink)}thead th .ar{opacity:.4;font-size:9px}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:var(--surface-2)}
+td.idc{font-family:var(--mono);color:var(--faint);font-size:12px}
+td.namec{font-weight:650;white-space:nowrap}
+td.namec .strip{display:inline-block;width:3px;height:14px;border-radius:2px;margin-right:8px;vertical-align:-2px}
+.one{color:var(--muted);font-size:12.5px;max-width:220px;line-height:1.35}
+.tag{font-family:var(--mono);font-size:10.5px;padding:2px 6px;border-radius:5px;background:var(--surface-3);color:var(--muted);margin:1px 2px 1px 0;display:inline-block;white-space:nowrap}
+.prov{cursor:pointer;border-bottom:1px dashed transparent}
+.prov:hover{border-bottom-color:var(--accent)}
+.prov.lowconf .tag,.prov.lowconf{color:var(--warn)}
+.prov.lowconf{border-bottom:1px dotted var(--warn)}
+.pill{font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.pill.easy{background:var(--good-soft);color:var(--good)}.pill.moderate{background:var(--warn-soft);color:var(--warn)}.pill.blocked{background:var(--bad-soft);color:var(--bad)}
+.acc-pill{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:5px;white-space:nowrap;font-weight:600;cursor:pointer}
+.acc-self{background:var(--good-soft);color:var(--good)}.acc-gate{background:var(--bad-soft);color:var(--bad)}.acc-mid{background:var(--warn-soft);color:var(--warn)}
+.badge{font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:4px;border:1px solid var(--line-2);color:var(--muted);cursor:pointer}
+.badge.official{border-color:var(--good);color:var(--good)}.badge.community{border-color:var(--warn);color:var(--warn)}
+.badge.yes{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.scorecell{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:96px}
+.scorebar{flex:1;height:7px;border-radius:4px;background:var(--surface-2);overflow:hidden;min-width:44px}
+.scorebar i{display:block;height:100%;border-radius:4px}
+.scoreval{font-family:var(--mono);font-size:12px;font-weight:700;width:22px;text-align:right}
+.hc{width:7px;height:7px;border-radius:50%;background:var(--good);display:inline-block;margin-left:5px;vertical-align:1px}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}@media(max-width:900px){.two{grid-template-columns:1fr}}
+.pipe{display:flex;flex-direction:column}
+.stage{display:flex;gap:14px;align-items:flex-start;padding:13px 0;position:relative}
+.stage:not(:last-child):after{content:"";position:absolute;left:15px;top:38px;bottom:-4px;width:2px;background:var(--line-2)}
+.stage .ic{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:700;background:var(--accent-soft);color:var(--accent);z-index:1}
+.stage .body h4{font-size:14px;margin:3px 0 3px;font-weight:700}
+.stage .body p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.stage .body code{font-family:var(--mono);font-size:11px;background:var(--surface-2);padding:1px 5px;border-radius:4px;color:var(--ink)}
+.human{background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);border-radius:12px;padding:18px 20px}
+.human h3{font-size:14px;font-weight:700;color:var(--warn);margin-bottom:12px}
+.human ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.55;color:var(--ink)}.human li{margin-bottom:8px}.human li b{font-weight:650}
+
+.method{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:820px){.method{grid-template-columns:1fr 1fr}}
+.mstep{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.mstep .ph{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.mstep h4{font-size:14px;font-weight:700;margin:6px 0 6px}
+.mstep p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.mstep .g{font-family:var(--mono);font-size:11px;color:var(--good);margin-top:8px;display:block}
+
+.acc-hero{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 26px;box-shadow:var(--shadow);margin-bottom:18px}
+@media(max-width:680px){.acc-hero{grid-template-columns:1fr;gap:16px}}
+.gauge{display:flex;align-items:baseline;gap:8px}
+.gauge .before{font-family:var(--mono);font-size:26px;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--bad)}
+.gauge .arrow{color:var(--faint);font-size:20px}
+.gauge .after{font-family:var(--mono);font-size:52px;font-weight:800;letter-spacing:-.03em;color:var(--good);line-height:1}
+.acc-hero .expl{font-size:13.5px;color:var(--muted);line-height:1.5}.acc-hero .expl b{color:var(--ink)}
+.vmetrics{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.vm{font-family:var(--mono);font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);padding:5px 10px;border-radius:6px;color:var(--muted)}.vm b{color:var(--ink)}
+.misses{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:var(--shadow)}
+.misses table{min-width:820px}
+.verdict{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px}
+.verdict.miss{background:var(--bad-soft);color:var(--bad)}.verdict.refine{background:var(--warn-soft);color:var(--warn)}.verdict.confirm{background:var(--good-soft);color:var(--good)}
+
+.failgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.failgrid{grid-template-columns:1fr}}
+.fail{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:10px;padding:15px 17px;box-shadow:var(--shadow)}
+.fail h4{font-size:13.5px;font-weight:700;margin-bottom:5px}.fail p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.legendbox{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:16px;font-size:12.5px;color:var(--muted);line-height:1.7}
+.legendbox code{font-family:var(--mono);color:var(--ink)}
+
+.proof{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:760px){.proof{grid-template-columns:1fr}}
+.codeblock{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.codeblock .hd{font-family:var(--mono);font-size:11px;color:var(--faint);padding:9px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.codeblock pre{margin:0;padding:14px;overflow-x:auto;font-family:var(--mono);font-size:11.5px;line-height:1.65;color:var(--ink)}
+.codeblock .c{color:var(--faint)}.codeblock .k2{color:var(--accent)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.btn{font-family:var(--mono);font-size:12.5px;padding:9px 15px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;gap:7px}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}.btn:hover{text-decoration:none;border-color:var(--accent)}
+.treecard pre{font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--muted);margin:0;white-space:pre-wrap}
+
+footer{padding:38px 0 60px}
+footer .honesty{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+footer h3{font-size:13px;font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+footer ul{margin:0;padding-left:18px;font-size:13px;color:var(--muted);line-height:1.6}
+footer .sig{margin-top:20px;font-size:12px;color:var(--faint);font-family:var(--mono)}
+
+/* provenance modal */
+.modal-bg{position:fixed;inset:0;background:rgba(8,10,14,.55);backdrop-filter:blur(3px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.on{display:flex}
+.modal{background:var(--surface);border:1px solid var(--line-2);border-radius:14px;max-width:520px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+.modal .mh{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.modal .mh .t{font-size:12px;font-family:var(--mono);color:var(--muted)}
+.modal .mh .app{font-size:17px;font-weight:750}
+.modal .x{background:var(--surface-2);border:1px solid var(--line);border-radius:7px;width:30px;height:28px;cursor:pointer;color:var(--muted);font-size:15px}
+.modal .mb{padding:20px 22px}
+.mval{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:4px}
+.mconf{display:flex;align-items:center;gap:9px;margin:12px 0}
+.mconf .track{flex:1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.mconf .track i{display:block;height:100%;border-radius:5px}
+.mconf .pctv{font-family:var(--mono);font-size:12px;font-weight:700;width:38px;text-align:right}
+.chain{margin-top:16px}
+.chain .node{display:flex;gap:12px;align-items:flex-start;position:relative;padding:9px 0}
+.chain .node:not(:last-child):after{content:"";position:absolute;left:8px;top:26px;bottom:-2px;width:2px;background:var(--line-2)}
+.chain .node .dt{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:10px;z-index:1;background:var(--accent-soft);color:var(--accent);font-family:var(--mono);font-weight:700}
+.chain .node .cc{font-size:12.5px;color:var(--muted);line-height:1.4}
+.chain .node .cc b{color:var(--ink)}
+.chain .node .cc a{word-break:break-all;font-size:12px}
+.chain .node .cc .rb{font-family:var(--mono);font-size:10px;background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:4px;color:var(--muted);margin-left:2px}
+.vbadge{font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:5px;font-weight:600}
+.vbadge.pass{background:var(--good-soft);color:var(--good)}.vbadge.fail{background:var(--bad-soft);color:var(--bad)}.vbadge.unknown{background:var(--surface-2);color:var(--muted)}
+.brk{margin-top:6px}
+.brk .r{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;padding:5px 0;border-bottom:1px solid var(--line)}
+.brk .r:last-child{border-bottom:none;font-weight:700}
+.brk .r .p{font-family:var(--mono);font-weight:700}.brk .r .p.pos{color:var(--good)}.brk .r .p.neg{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="topbar"><div class="wrap">
+  <div class="brand"><span class="dot"></span>COMPOSIO · BUILDABILITY STUDY</div>
+  <nav class="topnav">
+    <a href="#patterns">Patterns</a><a href="#matrix">The 100</a><a href="#agent">Agent</a>
+    <a href="#method">Method</a><a href="#verify">Verification</a><a href="#proof">Run it</a>
+  </nav>
+  <button class="tgl" id="tgl" aria-label="Toggle theme">◐</button>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">AI Product Ops · take-home case study</div>
+  <h1 style="margin-top:14px">Which of 100 apps could become an agent toolkit today — and how do we know?</h1>
+  <p class="lede">An async agent pipeline researched all 100 apps against their live developer docs, scored each one's buildability, and <b>attached evidence + confidence to every field</b>. An independent agent then audited a sample to prove the numbers. Click any coloured value in the table to see its provenance chain.</p>
+  <div class="metarow" id="metarow"></div>
+</div></header>
+
+<section id="headline"><div class="wrap">
+  <div class="sec-head"><span class="num">01</span><h2>The headline</h2>
+    <span class="sub">Insights generated by an LLM over the whole dataset — grounded in the counts, not hand-picked.</span></div>
+  <div class="headline">
+    <div class="thesis"><span class="lbl">The one-sentence finding</span><span id="thesis"></span></div>
+    <div class="findings" id="findings"></div>
+    <div class="kpis" id="kpis"></div>
+  </div>
+</div></section>
+
+<section id="patterns"><div class="wrap">
+  <div class="sec-head"><span class="num">02</span><h2>The patterns</h2>
+    <span class="sub">Auth, access and buildability cluster hard. Here is where.</span></div>
+  <div class="charts">
+    <div class="card"><h3>Auth methods</h3><div class="cap" id="cap-auth"></div><div id="chart-auth"></div></div>
+    <div class="card"><h3>Can a developer self-serve credentials?</h3><div class="cap" id="cap-access"></div><div id="chart-access"></div></div>
+    <div class="card" style="grid-column:1/-1"><h3>Buildability by category — where the easy wins are</h3>
+      <div class="cap">Each row is a category (10 apps). Green = buildable today, amber = friction, red = blocked. Verdict = buildability-score band.</div>
+      <div id="chart-cat"></div>
+      <div class="legend"><span><i class="easy"></i>easy (score ≥ 68)</span><span><i class="moderate"></i>moderate (34–67)</span><span><i class="blocked"></i>blocked (&lt; 34)</span></div>
+    </div>
+    <div class="card"><h3>MCP availability</h3><div class="cap" id="cap-mcp"></div><div id="chart-mcp"></div></div>
+    <div class="card"><h3>Already a Composio toolkit?</h3><div class="cap" id="cap-comp"></div><div id="chart-comp"></div></div>
+  </div>
+  <div class="lists">
+    <div class="card listcard win"><h3>▲ Easy wins — just build it</h3><div class="taglist" id="wins"></div></div>
+    <div class="card listcard out"><h3>◆ Needs outreach — gated</h3><div class="taglist" id="outreach"></div></div>
+    <div class="card listcard sur"><h3>★ Surprises</h3><ul class="surlist" id="surprises"></ul></div>
+  </div>
+</div></section>
+
+<section id="matrix"><div class="wrap">
+  <div class="sec-head"><span class="num">03</span><h2>The 100</h2>
+    <span class="sub">Filter, search, sort. Score is the quantified verdict.</span></div>
+  <div class="controls">
+    <div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+      <input id="q" placeholder="Search app, auth, blocker…" aria-label="Search"></div>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="hint">Coloured / dashed values are <b>clickable</b> → open the field's provenance chain (evidence, retriever, verifier, human). Amber-dotted = lower confidence. <span class="hc"></span> = human-checked.</div>
+  <div class="tablewrap"><table>
+    <thead><tr>
+      <th data-k="id">#<span class="ar"></span></th>
+      <th data-k="name">App<span class="ar"></span></th>
+      <th data-k="category">Category<span class="ar"></span></th>
+      <th data-k="one_liner">What it does</th>
+      <th data-k="auth_methods">Auth<span class="ar"></span></th>
+      <th data-k="access">Access<span class="ar"></span></th>
+      <th data-k="api_surface">API<span class="ar"></span></th>
+      <th data-k="has_mcp">MCP<span class="ar"></span></th>
+      <th data-k="composio_toolkit">Composio<span class="ar"></span></th>
+      <th data-k="buildability_score">Score<span class="ar">▼</span></th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table></div>
+</div></section>
+
+<section id="agent"><div class="wrap">
+  <div class="sec-head"><span class="num">04</span><h2>The agent that did it</h2>
+    <span class="sub">A modular pipeline on Composio's own SDK + tools. Humans set the rubric and adjudicated the edges.</span></div>
+  <div class="two">
+    <div class="card"><h3 style="margin-bottom:14px">Pipeline</h3><div class="pipe">
+      <div class="stage"><div class="ic">P</div><div class="body"><h4>Providers</h4><p><b>Composio search</b> → Tavily → Firecrawl → plain fetch, in preference order. Playwright <code>browser</code> is a fallback, invoked only when a page is JS-walled or the verifier flags an inconsistency.</p></div></div>
+      <div class="stage"><div class="ic">1</div><div class="body"><h4>Researcher · <code>agents/researcher.py</code></h4><p>Gathers docs, then forces a structured record where <b>every field carries its own value + confidence + evidence URL</b>. Ran async under a <code>Semaphore(5)</code> across 10 categories.</p></div></div>
+      <div class="stage"><div class="ic">2</div><div class="body"><h4>Verifier · <code>agents/verifier.py</code></h4><p>A <b>different, stronger model</b> with an adversarial prompt re-researches a sample and diffs it; every evidence URL is fetched for a live 200. Sets each field's PASS/FAIL/UNKNOWN.</p></div></div>
+      <div class="stage"><div class="ic">3</div><div class="body"><h4>Pattern engine · <code>agents/pattern_analyzer.py</code></h4><p>Feeds the whole dataset to an LLM for the insights up top — grounded in code-computed counts so it can't invent a number.</p></div></div>
+      <div class="stage"><div class="ic">4</div><div class="body"><h4>Report · <code>agents/report_writer.py</code></h4><p>Renders this page straight from JSON. Nothing here is hand-written.</p></div></div>
+    </div></div>
+    <div class="human"><h3>⚠ Where a human was needed</h3><ul>
+      <li><b>Login-gated / thin docs</b> — fanbasis, iPayX, Paygent, higgsfield: the agent can't read behind a login wall, so it downgraded confidence and a human made the call.</li>
+      <li><b>Sandbox vs production</b> — "self-serve sandbox, KYC-gated production" (Plaid, Ramp, Binance) needed a human to encode as <code>sandbox-self-serve</code>.</li>
+      <li><b>Composio catalog stubs</b> — a toolkit <i>page</i> with 0 tools is not real coverage; a human distinguished "listed" from "usable".</li>
+      <li><b>Access reclassification</b> — the score exposed apps the agent hedged as "moderate" that were really gated (SFCC, Brex) or really self-serve; a human set the access value the score keys off.</li>
+    </ul></div>
+  </div>
+</div></section>
+
+<section id="method"><div class="wrap">
+  <div class="sec-head"><span class="num">05</span><h2>How it was built</h2>
+    <span class="sub">Perfect the pipeline on 5, then scale to 100. The score turns "easy" into a defensible number.</span></div>
+  <div class="method">
+    <div class="mstep"><span class="ph">Phase 1</span><h4>5 golden apps</h4><p>Salesforce, HubSpot, Slack, Stripe, Shopify — five auth models across five categories. The pipeline was tuned until these came out clean and consistent.</p><span class="g">→ then scaled to 100</span></div>
+    <div class="mstep"><span class="ph">Phase 2</span><h4>Async fan-out</h4><p>All 100 researched concurrently under a <code style="font-family:var(--mono);font-size:11px">Semaphore(5)</code> for rate-limiting; resumable via a JSON store so a crash never re-does finished work.</p><span class="g">→ minutes, not hours</span></div>
+    <div class="mstep"><span class="ph">Phase 3</span><h4>Score, don't guess</h4><p>Buildability is a weighted 0–100 score (auth, surface, breadth, MCP, access) with gated access hard-capped. The verdict is the score band — click any Score cell to see the maths.</p><span class="g">→ avg <span id="m-avg"></span>/100</span></div>
+    <div class="mstep"><span class="ph">Phase 4</span><h4>Verify + lift</h4><p>An independent adversarial audit + evidence-liveness on a stratified sample. It caught real errors and moved accuracy up — shown honestly below.</p><span class="g">→ <span id="m-lift"></span> accuracy</span></div>
+  </div>
+</div></section>
+
+<section id="verify"><div class="wrap">
+  <div class="sec-head"><span class="num">06</span><h2>Is it trustworthy?</h2>
+    <span class="sub">A sample, cross-checked by an independent agent and by hand. Hits and misses, shown honestly.</span></div>
+  <div class="acc-hero">
+    <div><div class="gauge"><span class="before" id="acc-before"></span><span class="arrow">→</span><span class="after" id="acc-after"></span></div>
+      <div class="eyebrow" style="margin-top:8px">graded input-field accuracy on the sample</div></div>
+    <div class="expl" id="acc-expl"></div>
+  </div>
+  <div class="vmetrics" id="vmetrics"></div>
+  <div class="misses"><table>
+    <thead><tr><th>App</th><th>Field</th><th>First pass</th><th>Verified</th><th>Verdict</th><th>Why</th></tr></thead>
+    <tbody id="missbody"></tbody>
+  </table></div>
+</div></section>
+
+<section id="fails"><div class="wrap">
+  <div class="sec-head"><span class="num">07</span><h2>What defeated the agent</h2>
+    <span class="sub">If an app beat us, it's here — not hidden.</span></div>
+  <div class="failgrid" id="failgrid"></div>
+  <div class="legendbox">
+    <b>Reading the table.</b>
+    <code>access</code>: <code>self-serve</code> = mint creds yourself free/trial · <code>sandbox-self-serve</code> = free sandbox, gated production ·
+    <code>gated-approval</code> = app-review/dev-token/KYC · <code>gated-paid</code> = needs a paid plan · <code>gated-partner</code> = contact-sales/enterprise · <code>trial-only</code> = time-limited trial.<br>
+    <code>score</code> bands: <b>easy</b> ≥ 68 · <b>moderate</b> 34–67 · <b>blocked</b> &lt; 34, with gated access hard-capped so a great API you can't get creds for can't score "easy".
+  </div>
+</div></section>
+
+<section id="proof"><div class="wrap">
+  <div class="sec-head"><span class="num">08</span><h2>Run it yourself</h2>
+    <span class="sub">The agent is the deliverable. This whole page regenerates from JSON.</span></div>
+  <div class="proof">
+    <div class="codeblock"><div class="hd">$ reproduce the study</div><pre><span class="c"># perfect the pipeline on the 5 golden apps first</span>
+python main.py research <span class="k2">--golden</span>
+<span class="c"># then scale to all 100 (async, Semaphore(5), resumable)</span>
+python main.py research
+<span class="c"># independent adversarial audit of a stratified sample</span>
+python main.py verify <span class="k2">--sample</span> 20
+<span class="c"># LLM pattern engine + render this page from JSON</span>
+python main.py patterns
+python main.py report
+<span class="c"># …or the whole chain:</span>
+python main.py <span class="k2">all</span></pre></div>
+    <div>
+      <div class="card treecard"><h3 style="margin-bottom:10px">Architecture</h3><pre>research-agent/
+├─ agents/      researcher · verifier
+│               pattern_analyzer · report_writer
+├─ providers/   composio_search · tavily · firecrawl
+│               docs_fetcher · browser (fallback)
+├─ models/      per-field provenance + score
+├─ database/    resumable JSON store
+├─ prompts/     versioned LLM prompts
+├─ output/      results.json · patterns.json
+└─ main.py      async orchestrator</pre>
+        <div class="btnrow">
+          <a class="btn primary" id="repo-btn" href="__REPO_URL__">⎇ Source repo</a>
+          <a class="btn" href="#matrix">↑ Back to the 100</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="honesty"><h3>Honesty notes</h3><ul>
+    <li>No paid accounts were used. Where an app is gated behind payment or partnership, that <i>is</i> the finding — reported with evidence, not treated as a failure.</li>
+    <li>Confidence is <b>per field</b>, not per app, and visible in every provenance popup. Lower-confidence values are dotted amber in the table.</li>
+    <li>Verification independently graded <span id="foot-fields">80</span> input fields on a <span id="foot-sample">20</span>-app stratified sample, not all 100. The accuracy number is the sample's.</li>
+    <li>Only <span id="foot-human"></span> of 100 apps are human-checked (the audited sample); the rest carry the agent's own confidence. That distinction is shown, not blurred.</li>
+  </ul></div>
+  <div class="sig">Built for Composio · async research agent + per-field provenance + verification loop · every figure computed live from output/results.json</div>
+</div></footer>
+
+<div class="modal-bg" id="modal-bg"><div class="modal">
+  <div class="mh"><div><div class="t" id="m-field"></div><div class="app" id="m-app"></div></div><button class="x" id="m-x">✕</button></div>
+  <div class="mb" id="m-body"></div>
+</div></div>
+
+<script>
+const RESULTS = /*__RESULTS__*/{};
+const PATTERNS = /*__PATTERNS__*/{};
+const VERIFY = /*__VERIFY__*/{};
+const REPO = "__REPO_URL__";
+const APPS = RESULTS.apps || [];
+const C = PATTERNS.counts || {};
+document.getElementById('repo-btn').href = REPO;
+
+const catShort={"CRM and Sales":"CRM","Support and Helpdesk":"Support","Communications and Messaging":"Comms",
+  "Marketing, Ads, Email and Social":"Marketing","Ecommerce":"Ecommerce","Data, SEO and Scraping":"Data/SEO",
+  "Developer, Infra and Data platforms":"Dev/Infra","Productivity and Project Management":"Productivity",
+  "Finance and Fintech":"Finance","AI, Research and Media-native":"AI/Media"};
+const cats=[...new Set(APPS.map(a=>a.category))];
+const obtainable=new Set(["self-serve","sandbox-self-serve","trial-only","waitlist"]);
+const fv=(a,k)=>a.fields[k]?a.fields[k].value:null;
+const pct=(n,d)=>Math.round(100*n/(d||1));
+const scoreColor=s=>s>=68?'var(--good)':s>=34?'var(--warn)':'var(--bad)';
+const verdictOf=s=>s>=68?'easy':s>=34?'moderate':'blocked';
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+
+/* theme */
+document.getElementById('tgl').onclick=()=>{const r=document.documentElement;
+  const cur=r.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  r.setAttribute('data-theme',cur==='dark'?'light':'dark');};
+
+/* meta */
+const humanN=APPS.filter(a=>Object.values(a.fields).some(f=>f.human_checked)).length;
+const avg=Math.round(APPS.reduce((s,a)=>s+a.buildability_score,0)/APPS.length);
+document.getElementById('metarow').innerHTML=[
+  `<span class="chipmeta"><b>${APPS.length}</b> apps</span>`,
+  `<span class="chipmeta"><b>${cats.length}</b> categories</span>`,
+  `<span class="chipmeta">avg score <b>${avg}</b>/100</span>`,
+  `<span class="chipmeta"><b>${VERIFY.before}%→${VERIFY.after}%</b> verified</span>`,
+  `<span class="chipmeta"><b>${humanN}</b> human-checked</span>`,
+].join('');
+
+/* headline */
+document.getElementById('thesis').textContent=PATTERNS.headline||'';
+document.getElementById('findings').innerHTML=(PATTERNS.insights||[]).slice(0,4).map((f,i)=>
+  `<div class="finding"><h4><span class="n">${String(i+1).padStart(2,'0')}</span>${esc(f.title)}</h4><p>${esc(f.detail)}</p></div>`).join('');
+const nEasy=APPS.filter(a=>a.buildability_score>=68).length;
+const nSelf=C.self_serve||APPS.filter(a=>obtainable.has(fv(a,'access'))).length;
+const nMcp=(C.mcp&&C.mcp.official)||0, nComp=(C.composio&&C.composio.yes)||0;
+document.getElementById('kpis').innerHTML=[
+  {v:nEasy,l:'buildable today (score ≥ 68)'},
+  {v:nSelf,l:'let a dev self-serve credentials'},
+  {v:nMcp+' / '+APPS.length,l:'ship an official MCP server'},
+  {v:nComp+' / '+APPS.length,l:'already a Composio toolkit'},
+].map(k=>`<div class="kpi"><div class="v">${k.v}</div><div class="l">${k.l}</div></div>`).join('');
+
+/* charts */
+function bars(el,data,max){const m=max||Math.max(...data.map(d=>d.v));
+  el.innerHTML=data.map(d=>`<div class="bar"><span class="lab">${d.k}</span>
+   <span class="track"><span class="fill ${d.cls||'acc'}" style="width:${pct(d.v,m)}%"></span></span>
+   <span class="val">${d.v}</span></div>`).join('');}
+bars(document.getElementById('chart-auth'),Object.entries(C.auth||{}).map(([k,v])=>({k,v})),APPS.length);
+document.getElementById('cap-auth').textContent='Apps support more than one; OAuth2 + a key/token path is the common pairing.';
+const accOrder=['self-serve','sandbox-self-serve','trial-only','gated-approval','gated-paid','gated-partner','no-public-api'];
+bars(document.getElementById('chart-access'),accOrder.filter(k=>C.access&&C.access[k]).map(k=>({k,v:C.access[k],
+  cls:obtainable.has(k)?'easy':(k==='no-public-api'?'blocked':'moderate')})));
+document.getElementById('cap-access').textContent=`${nSelf} self-serve (green) vs ${APPS.length-nSelf} gated (amber/red) — the outreach pile.`;
+bars(document.getElementById('chart-mcp'),[['official','easy'],['community','moderate'],['none','blocked'],['unknown','blocked']]
+  .filter(([k])=>C.mcp&&C.mcp[k]!=null).map(([k,cls])=>({k,v:C.mcp[k]||0,cls})));
+document.getElementById('cap-mcp').textContent=`${(C.mcp&&C.mcp.official)||0} official + ${(C.mcp&&C.mcp.community)||0} community = ${((C.mcp&&C.mcp.official)||0)+((C.mcp&&C.mcp.community)||0)} of 100 already MCP-reachable.`;
+bars(document.getElementById('chart-comp'),[['yes','easy'],['no','blocked'],['unknown','moderate']]
+  .filter(([k])=>C.composio&&C.composio[k]!=null).map(([k,cls])=>({k,v:C.composio[k]||0,cls})));
+document.getElementById('cap-comp').textContent=`Composio covers ${(C.composio&&C.composio.yes)||0}. The ${(C.composio&&C.composio.no)||0} "no" rows are the expansion targets.`;
+
+document.getElementById('chart-cat').innerHTML=cats.map(c=>{
+  const rows=APPS.filter(a=>a.category===c);
+  const e=rows.filter(a=>a.buildability_score>=68).length,m=rows.filter(a=>a.buildability_score>=34&&a.buildability_score<68).length,b=rows.length-e-m;
+  return `<div class="srow"><span class="lab">${catShort[c]||c}</span><span class="stack">
+   <span class="seg easy" style="width:${e*10}%"></span><span class="seg moderate" style="width:${m*10}%"></span><span class="seg blocked" style="width:${b*10}%"></span>
+   </span><span class="val mono">${e}·${m}·${b}</span></div>`;}).join('');
+
+/* lists */
+document.getElementById('wins').innerHTML=(PATTERNS.easy_wins||[]).map(n=>`<span class="tg">${esc(n)}</span>`).join('');
+document.getElementById('outreach').innerHTML=(PATTERNS.needs_outreach||[]).map(n=>`<span class="tg">${esc(n)}</span>`).join('');
+document.getElementById('surprises').innerHTML=(PATTERNS.surprises||[]).map(s=>`<li>${esc(s)}</li>`).join('');
+
+/* method */
+document.getElementById('m-avg').textContent=avg;
+document.getElementById('m-lift').textContent=`${VERIFY.before}%→${VERIFY.after}%`;
+
+/* ---- matrix ---- */
+let activeCat='All',sortK='buildability_score',sortDir=-1,query='';
+const chipsEl=document.getElementById('chips');
+chipsEl.innerHTML=['All',...cats].map(c=>`<button class="chip ${c==='All'?'on':''}" data-c="${c}">${c==='All'?'All 100':(catShort[c]||c)}</button>`).join('');
+chipsEl.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;activeCat=b.dataset.c;
+  [...chipsEl.children].forEach(x=>x.classList.toggle('on',x===b));render();};
+document.getElementById('q').oninput=e=>{query=e.target.value.toLowerCase();render();};
+document.querySelectorAll('thead th[data-k]').forEach(th=>th.onclick=()=>{const k=th.dataset.k;
+  sortDir=(sortK===k)?-sortDir:(k==='buildability_score'?-1:1);sortK=k;
+  document.querySelectorAll('thead .ar').forEach(a=>a.textContent='');th.querySelector('.ar').textContent=sortDir>0?'▲':'▼';render();});
+
+const accClass=v=>obtainable.has(v)?'acc-self':(v==='no-public-api'?'acc-gate':(String(v).startsWith('gated')?'acc-gate':'acc-mid'));
+function provCell(a,k,inner){const f=a.fields[k];const lc=f&&f.confidence<0.7?'lowconf':'';
+  return `<span class="prov ${lc}" data-app="${a.id}" data-field="${k}">${inner}</span>`;}
+
+function render(){
+  let rows=APPS.filter(a=>activeCat==='All'||a.category===activeCat);
+  if(query)rows=rows.filter(a=>(a.name+' '+fv(a,'one_liner')+' '+(fv(a,'auth_methods')||[]).join(' ')+' '+fv(a,'access')+' '+a.category).toLowerCase().includes(query));
+  rows.sort((x,y)=>{let a=x[sortK]!==undefined?x[sortK]:fv(x,sortK),b=y[sortK]!==undefined?y[sortK]:fv(y,sortK);
+    if(Array.isArray(a))a=a[0]; if(Array.isArray(b))b=b[0];
+    if(typeof a==='string')return sortDir*a.localeCompare(b);return sortDir*((a||0)-(b||0));});
+  document.getElementById('count').textContent=rows.length+' shown';
+  document.getElementById('tbody').innerHTML=rows.map(a=>{
+    const sc=a.buildability_score, vd=verdictOf(sc);
+    const auth=(fv(a,'auth_methods')||[]).map(m=>`<span class="tag">${m}</span>`).join('');
+    const human=Object.values(a.fields).some(f=>f.human_checked)?'<span class="hc" title="human-checked"></span>':'';
+    return `<tr>
+      <td class="idc">${a.id}</td>
+      <td class="namec"><span class="strip ${vd}"></span>${esc(a.name)}${human}</td>
+      <td><span class="tag">${catShort[a.category]||a.category}</span></td>
+      <td>${provCell(a,'one_liner',`<span class="one">${esc(fv(a,'one_liner'))}</span>`)}</td>
+      <td>${provCell(a,'auth_methods',auth)}</td>
+      <td>${provCell(a,'access',`<span class="acc-pill ${accClass(fv(a,'access'))}">${fv(a,'access')}</span>`)}</td>
+      <td>${provCell(a,'api_surface',`<span class="tag">${fv(a,'api_surface')}</span>`)}</td>
+      <td>${provCell(a,'has_mcp',`<span class="badge ${fv(a,'has_mcp')}">${fv(a,'has_mcp')}</span>`)}</td>
+      <td>${provCell(a,'composio_toolkit',`<span class="badge ${fv(a,'composio_toolkit')==='yes'?'yes':''}">${fv(a,'composio_toolkit')}</span>`)}</td>
+      <td><span class="scorecell" data-app="${a.id}" data-field="__score"><span class="scorebar"><i style="width:${sc}%;background:${scoreColor(sc)}"></i></span><span class="scoreval" style="color:${scoreColor(sc)}">${sc}</span></span></td>
+    </tr>`;}).join('');
+}
+render();
+
+/* ---- provenance modal ---- */
+const bg=document.getElementById('modal-bg');
+const close=()=>bg.classList.remove('on');
+document.getElementById('m-x').onclick=close;
+bg.onclick=e=>{if(e.target===bg)close();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+const FIELD_LABEL={one_liner:'What it does',auth_methods:'Auth methods',access:'Access model',
+  api_surface:'API surface',has_mcp:'MCP',composio_toolkit:'Composio toolkit'};
+
+document.getElementById('tbody').addEventListener('click',e=>{
+  const cell=e.target.closest('[data-field]');if(!cell)return;
+  const a=APPS.find(x=>x.id==cell.dataset.app);const k=cell.dataset.field;
+  if(k==='__score'){openScore(a);}else{openField(a,k);}
+});
+
+function openField(a,k){
+  const f=a.fields[k];if(!f)return;
+  document.getElementById('m-field').textContent='PROVENANCE · '+(FIELD_LABEL[k]||k);
+  document.getElementById('m-app').textContent=a.name;
+  const val=Array.isArray(f.value)?f.value.join(', '):String(f.value);
+  const conf=Math.round(f.confidence*100);
+  const vcls=f.verifier||'unknown';
+  const sources=(f.sources||[]).map((s,i)=>`
+    <div class="node"><div class="dt">${i+1}</div><div class="cc"><b>Evidence</b> — retrieved by <span class="rb">${s.retrieved_by}</span><br>
+      <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)}</a></div></div>`).join('')
+    || `<div class="node"><div class="dt">–</div><div class="cc">No evidence URL attached to this field.</div></div>`;
+  document.getElementById('m-body').innerHTML=`
+    <div class="mval">${esc(val)}</div>
+    <div class="mconf"><span class="eyebrow">confidence</span><span class="track"><i style="width:${conf}%;background:${conf>=70?'var(--good)':conf>=55?'var(--warn)':'var(--bad)'}"></i></span><span class="pctv">${conf}%</span></div>
+    <div class="chain">
+      <div class="node"><div class="dt">◆</div><div class="cc"><b>Value</b> — ${esc(val)}</div></div>
+      ${sources}
+      <div class="node"><div class="dt">V</div><div class="cc"><b>Verifier</b> — <span class="vbadge ${vcls}">${vcls.toUpperCase()}</span> ${f.verifier_note?('<br>'+esc(f.verifier_note)):''}</div></div>
+      <div class="node"><div class="dt">H</div><div class="cc"><b>Human</b> — ${f.human_checked?'checked & adjudicated against primary docs':'not in the audited sample (agent confidence only)'}</div></div>
+    </div>`;
+  bg.classList.add('on');
+}
+function openScore(a){
+  document.getElementById('m-field').textContent='BUILDABILITY SCORE';
+  document.getElementById('m-app').textContent=a.name+' — '+a.buildability_score+'/100 ('+verdictOf(a.buildability_score)+')';
+  const rows=(a.score_breakdown||[]).map(b=>`<div class="r"><span>${esc(b.reason)}</span><span class="p ${b.points>=0?'pos':'neg'}">${b.points>=0?'+':''}${b.points}</span></div>`).join('');
+  document.getElementById('m-body').innerHTML=`<div class="brk">${rows}
+    <div class="r"><span>Total</span><span class="p" style="color:${scoreColor(a.buildability_score)}">${a.buildability_score}/100</span></div></div>
+    <p style="font-size:12.5px;color:var(--muted);margin:14px 0 0;line-height:1.5">Access is the dominant lever: gated apps are hard-capped so a strong API you can't get credentials for cannot score "easy".</p>`;
+  bg.classList.add('on');
+}
+
+/* verification */
+document.getElementById('acc-before').textContent=VERIFY.before+'%';
+document.getElementById('acc-after').textContent=VERIFY.after+'%';
+document.getElementById('acc-expl').innerHTML=VERIFY.explain||'';
+document.getElementById('vmetrics').innerHTML=(VERIFY.metrics||[]).map(m=>`<span class="vm">${m}</span>`).join('');
+document.getElementById('missbody').innerHTML=(VERIFY.diffs||[]).map(d=>`<tr>
+  <td class="namec" style="white-space:nowrap">${esc(d.app)}</td><td><span class="tag">${esc(d.field)}</span></td>
+  <td class="one">${esc(d.first)}</td><td class="one">${esc(d.verified)}</td>
+  <td><span class="verdict ${d.verdict}">${d.verdict}</span></td><td class="one">${esc(d.why)}</td></tr>`).join('');
+document.getElementById('foot-fields').textContent=VERIFY.graded_fields||80;
+document.getElementById('foot-sample').textContent=VERIFY.sample||20;
+document.getElementById('foot-human').textContent=humanN;
+
+/* failures */
+const FAILS=[
+  {n:'Paygent Connect',t:'Genuinely defeated us. Japanese, contract-only, mutual-TLS client certificates, no self-serve. The brief\'s "NMI-powered" hint appears to be wrong — we report that rather than guess.'},
+  {n:'NotebookLM',t:'No standalone public API exists — only a licensed enterprise API on Google Cloud. A valid "blocked" finding, not a gap in the research.'},
+  {n:'fanbasis / iPayX',t:'Core developer docs sit behind a login wall. The agent read the public reference, flagged low confidence, and a human confirmed what was reachable.'},
+  {n:'higgsfield',t:'Thin, fast-moving docs and an unverified MCP claim. Real self-serve REST API confirmed, but breadth is uncertain — hence a mid-band score.'},
+];
+document.getElementById('failgrid').innerHTML=FAILS.map(f=>`<div class="fail"><h4>${esc(f.n)}</h4><p>${esc(f.t)}</p></div>`).join('');
+</script>

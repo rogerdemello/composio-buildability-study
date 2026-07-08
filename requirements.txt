@@ -1,5 +1,12 @@
 # Research agent runtime
 anthropic>=0.40.0
+httpx>=0.27.0
+python-dotenv>=1.0.0
+
+# Composio SDK — used to power the researcher with Composio's own search tools
 composio>=0.7.0
 composio_anthropic>=0.7.0
-python-dotenv>=1.0.0
+
+# Optional providers (pipeline degrades gracefully if absent / no key)
+#   tavily + firecrawl are called over HTTP via httpx (no extra dep needed)
+playwright>=1.44.0        # browser fallback; run `playwright install chromium` after pip

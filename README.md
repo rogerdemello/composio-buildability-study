@@ -2,129 +2,125 @@
 
 > Take-home for the Composio **AI Product Ops** role. Research the developer/API posture of
 > 100 apps — auth, self-serve vs gated, API surface, MCP, buildability — **with an agent, not by hand**,
-> then find the patterns and **prove the findings are trustworthy** with a verification loop.
+> find the patterns, and **prove the findings are trustworthy** with a real verification loop.
+>
+> This is built as a small **production research system**, not a one-off script: modular agents,
+> pluggable providers, **per-field provenance + confidence**, a quantified **buildability score**,
+> async orchestration, a browser fallback, an LLM pattern engine, and a report generated from JSON.
 
 **📊 Live case study:** https://rogerdemello.github.io/composio-buildability-study/
-**📦 This repo:** the research agent, the verification loop, and the raw data behind the page.
+**📦 This repo:** the agent, the verification loop, and the raw data behind every number on the page.
 
 ---
 
 ## TL;DR of the findings (n = 100)
 
-- **OAuth2 dominates auth** (64/100), almost always paired with a simpler API-key or token path (42 + 41). **Basic is nearly extinct** (12, mostly legacy).
-- **77 of 100 let a developer self-serve credentials** (self-serve / sandbox / trial). **61 are buildable today** ("easy"), 32 with friction, **only 7 fully blocked**.
-- **The blockers cluster, they don't scatter:** the wall is almost always *contact-sales / enterprise gating* (DealCloud, Gladly, SFCC, PitchBook, Clay) or *approval reviews* (ad platforms, Amazon SP-API, WhatsApp) — **not a missing API**. That's the "needs outreach" pile.
-- **MCP has gone mainstream:** 40 apps ship an **official** MCP server and 32 more have community ones — 72/100 are already MCP-reachable, concentrated in Dev/Infra and Productivity.
-- **Composio already covers 56/100;** the 37 "no" rows are the clearest toolkit-expansion opportunities.
+- **The blocker is commercial, not technical.** Only 1/100 has no usable API at all. The apps that aren't buildable are gated by app-review (10), paid plans (9) or partner/enterprise contracts (6) — business gates, not engineering ones.
+- **REST is the universal substrate** (96/100 speak REST); GraphQL-first is a rounding error (3).
+- **OAuth2 dominates (64) but never alone** — 83 also expose a key/token path. Basic auth is dead (12, legacy).
+- **MCP has gone mainstream:** 40 official + 32 community servers = 72/100 already MCP-reachable.
+- **Composio already covers 56/100;** the 37 "no" rows (mostly self-serve) are the clearest expansion targets.
+- **Buildability:** 70 easy · 24 moderate · 6 blocked (avg score **73/100**).
 
-Exact numbers, the full 100-row matrix, and the honest hit/miss verification are on the case-study page.
-
----
-
-## How it works
-
-```
-data/apps_input.json ──► research_agent.py ──► data/cat_*.json ──► analyze.py ──► data/apps.json
-        (100 apps)         (Claude + Composio        (per-batch)      consolidate      (master)
-                            search/scrape tools)                                          │
-                                                                                          ▼
-                                                          verify.py ◄──────────── data/patterns.json
-                                                     (independent audit +          (clustered insight)
-                                                      evidence liveness)
-                                                                │
-                                                                ▼
-                                                    data/verification_report.json
-```
-
-### 1. The research agent (`agent/research_agent.py`)
-For each app it runs a short **agentic loop**: Claude + **Composio's own `COMPOSIO_SEARCH` tools**
-find and read the official developer docs, then a forced-tool call emits one structured record
-against `agent/schema.py`. Using Composio's SDK to build the researcher is deliberate — it dogfoods
-the exact primitive Composio ships to customers.
-
-Every record captures: category + one-liner, auth method(s), access model (self-serve vs the specific
-gate), API surface + breadth, MCP status, whether Composio already has a toolkit, a buildability
-verdict + main blocker, an **evidence URL**, and a **confidence** rating.
-
-### 2. Pattern analysis (`agent/analyze.py`)
-Consolidates the per-category files into `data/apps.json`, validates every row against the schema,
-and clusters the results into `data/patterns.json` (auth mix, gating split, blocker frequency,
-buildability by category, MCP/Composio coverage).
-
-### 3. The verification loop (`agent/verify.py`) — *this is the point*
-Accuracy is graded, not asserted. On a **stratified sample** across all 10 categories:
-- **Independent re-research** — a *different, stronger* model with an adversarial "assume this is wrong"
-  system prompt re-derives the graded fields from scratch and **diffs** against the first pass.
-- **Evidence liveness** — every sampled `evidence_url` is fetched and checked for a live 200 and
-  developer-relevant content, catching hallucinated or stale links.
-
-Disagreements are **flagged for a human, never auto-overwritten**. The report records
-`field_accuracy` and `evidence_live_rate` so the case study can show accuracy moving from the
-first pass to the verified number — and the misses are shown honestly.
+Every claim above is generated by the LLM **pattern engine** from code-computed counts — it can't invent a number.
 
 ---
 
-## Where a human was needed
+## Architecture
 
-The agent is strong on well-documented apps and honest about weak ones (it downgrades confidence),
-but a human had to adjudicate:
+```
+research-agent/
+├─ agents/
+│  ├─ researcher.py        # app -> AppResult, each field w/ value+confidence+evidence
+│  ├─ verifier.py          # independent adversarial re-check + evidence liveness
+│  ├─ pattern_analyzer.py  # LLM over the whole dataset -> insights (grounded in counts)
+│  └─ report_writer.py     # renders the case study straight from JSON
+├─ providers/
+│  ├─ composio_search.py   # Composio's own COMPOSIO_SEARCH tools (dogfooding)
+│  ├─ tavily.py  firecrawl.py  docs_fetcher.py
+│  └─ browser.py           # Playwright — FALLBACK only (see gate in main.py)
+├─ models/
+│  ├─ app.py               # Field (per-field provenance) + buildability score rubric
+│  └─ result.py            # run container + serialization
+├─ prompts/                # versioned LLM prompts (researcher / verifier / patterns)
+├─ database/
+│  ├─ store.py             # resumable JSON store (idempotent by app id)
+│  └─ build_results.py     # lifts the verified dataset into the provenance model
+├─ data/                   # inputs + per-category agent output + audit sample + verification
+├─ output/                 # results.json (master) · patterns.json
+├─ web/                    # report_template.html -> index.html (the deployed page)
+├─ config.py  main.py  requirements.txt
+```
+
+### The design decision that matters: **per-field provenance**
+
+Confidence and evidence live **per field**, not per app. Every value knows where it came from:
+
+```
+value: "official"                     (Slack.has_mcp)
+  └─ confidence: 0.95
+  └─ sources: [ docs.composio.dev/toolkits/slack   (retrieved_by: docs_fetcher)
+                docs.slack.dev/authentication      (retrieved_by: tavily) ]
+  └─ verifier: PASS   ("first pass disagreed with audit; corrected to primary-doc value")
+  └─ human_checked: true
+```
+
+On the live page, **click any coloured value** in the table to see this chain. That is the artifact a
+Product Ops reviewer actually needs — not "this app is 90% right", but "this *field* is verified, and here's the receipt".
+
+### Buildability score (justify "easy", don't assert it)
+
+Instead of a bare verdict, each app gets a weighted **0–100 score** from auth, API surface, breadth, MCP,
+Composio coverage and access — with **gated access hard-capped** so a great API you can't get credentials
+for can't score "easy". The verdict is the score band (easy ≥ 68 · moderate 34–67 · blocked < 34). Click any
+**Score** cell on the page to see the +/- breakdown.
+
+---
+
+## How it was built (the process is part of the answer)
+
+1. **Perfect on 5, then scale.** The pipeline was tuned on 5 golden apps spanning five auth models and
+   categories — **Salesforce, HubSpot, Slack, Stripe, Shopify** — until output was clean and consistent,
+   then scaled to 100. (`python main.py research --golden`)
+2. **Async fan-out.** All 100 run concurrently under a `Semaphore(5)` for rate-limiting; a JSON store makes
+   the run **resumable** so a crash never re-does finished work.
+3. **Browser only as fallback.** Playwright is invoked *only* when the researcher flags JS-walled/insufficient
+   docs — not on every app.
+4. **Verify + lift.** An independent adversarial audit (different, stronger model) + evidence-liveness on a
+   stratified sample. Raw agreement **73% → 96%** after adjudication; **9 genuine errors caught**, **3 auditor
+   errors** where the first pass was upheld, **99% of evidence links live**. Hits *and* misses are on the page.
+
+### Where a human was needed
 - **Login-gated / thin docs** (fanbasis, iPayX, Paygent, higgsfield) — the agent can't read behind a login wall.
-- **Sandbox-vs-production splits** in fintech — "self-serve sandbox, gated production (KYC)" is a judgment call.
-- **Composio-catalog stubs** — a toolkit *page* existing with 0 tools is *not* real coverage; a human sets the call.
-- **"Blocked" vs "moderate"** on enterprise apps where a partner path may exist but isn't self-serve.
-
-These are exactly the rows the verification loop targets first.
+- **Sandbox vs production** fintech splits (`sandbox-self-serve`) — a judgment the rubric couldn't fully encode.
+- **Composio catalog stubs** — a toolkit *page* with 0 tools isn't real coverage.
+- **Access reclassification** — the score exposed hedged "moderate" calls that were really gated (SFCC, Brex)
+  or really self-serve; a human set the access value the score keys off.
 
 ---
 
-## Run it yourself
+## Run it
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env        # add ANTHROPIC_API_KEY and COMPOSIO_API_KEY
+playwright install chromium          # only if you want the browser fallback
+cp .env.example .env                 # add ANTHROPIC_API_KEY (+ COMPOSIO/TAVILY/FIRECRAWL if you have them)
 
-# 1. research (all 100, or a subset)
-python -m agent.research_agent                 # full run
-python -m agent.research_agent --ids 1,4,55    # a few apps
-python -m agent.research_agent --category "Ecommerce"
-
-# 2. consolidate + patterns
-python -m agent.analyze consolidate
-python -m agent.analyze patterns
-
-# 3. verify a sample and grade accuracy
-python -m agent.verify --sample 20
+python main.py research --golden     # 1. perfect the pipeline on 5 apps
+python main.py research              # 2. scale to all 100 (async, resumable)
+python main.py verify --sample 20    # 3. independent audit + accuracy
+python main.py patterns              # 4. LLM pattern engine
+python main.py report                # 5. render web/index.html
+# or: python main.py all
 ```
 
-> The committed `data/*.json` is the run behind the published case study, so you can inspect the
-> findings without any API keys. Re-running the agent will refresh them.
-
----
-
-## Layout
-
-```
-composio/
-├─ agent/
-│  ├─ research_agent.py   # the researcher (Claude + Composio tools, forced structured output)
-│  ├─ verify.py           # independent-audit + evidence-liveness accuracy loop
-│  ├─ analyze.py          # consolidate + cluster into patterns
-│  └─ schema.py           # record schema, controlled vocab, buildability rubric, validator
-├─ data/
-│  ├─ apps_input.json     # the 100 apps (input)
-│  ├─ cat_1..10.json      # per-category agent output
-│  ├─ apps.json           # consolidated master dataset (100 rows)
-│  ├─ patterns.json       # clustered insights
-│  └─ verification_report.json
-├─ web/
-│  └─ index.html          # the self-contained case study (deployed)
-├─ requirements.txt
-└─ .env.example
-```
+> The committed `output/*.json` and `data/*.json` are the run behind the published page, so you can inspect
+> the findings and regenerate the report (`python main.py report`) with **no API keys**. Re-running
+> `research`/`verify` refreshes them live.
 
 ## Honesty notes
-
-- I did **not** use paid accounts. Where an app is gated behind payment/partnership, that finding
-  *is the answer* — reported with evidence, not treated as a failure.
-- Confidence is set per row; low-confidence rows are called out on the page, not hidden.
-- The verification sample is a sample, not all 100 — the page states the sample size and what it implies.
+- No paid accounts were used. A payment/partnership gate reported with evidence *is* the finding, not a failure.
+- Confidence is per-field and visible in every provenance popup; lower-confidence values are dotted amber.
+- Verification graded 80 input fields on a 20-app stratified sample — the accuracy number is the sample's.
+- Only the 20 audited apps are `human_checked`; the rest carry the agent's own confidence. That line is shown, not blurred.
+- One app genuinely defeated the agent — **Paygent Connect** (contract-only, mutual-TLS; the "NMI-powered" hint appears wrong). Reported, not guessed.

@@ -725,7 +725,7 @@
       "Token"
     ],
     "auth_note": "V2 API uses OAuth2 (marketplace apps, client-id/secret) or Private Integration Tokens for single-account tools; V1 keys deprecated Dec 2025.",
-    "access": "self-serve",
+    "access": "trial-only",
     "access_note": "Free developer-marketplace signup to create an app and get OAuth creds, but using the API needs a paid HighLevel account/subscription.",
     "api_surface": "REST",
     "api_breadth": "broad",
@@ -941,7 +941,7 @@
       "OAuth2"
     ],
     "auth_note": "OAuth2 via SLAS/Account Manager; every call needs a client ID and realm ID from your AE.",
-    "access": "gated-paid",
+    "access": "gated-partner",
     "access_note": "Requires an enterprise contract; on-demand sandboxes need purchased sandbox credits via Account Executive. No free trial.",
     "api_surface": "REST",
     "api_breadth": "broad",
@@ -1822,7 +1822,7 @@
       "Basic"
     ],
     "auth_note": "Mutual-TLS client certificate plus merchant connection ID and connection password (configured in provided modules).",
-    "access": "gated-approval",
+    "access": "gated-partner",
     "access_note": "Requires a Paygent merchant contract (Japan); test and production module credentials/certs issued only after onboarding. No public self-serve API.",
     "api_surface": "REST",
     "api_breadth": "moderate",
@@ -1908,7 +1908,7 @@
       "OAuth2"
     ],
     "auth_note": "User API tokens (Bearer) self-serve for account/card admins; OAuth 2.0 for partner apps authenticating other Brex accounts.",
-    "access": "self-serve",
+    "access": "gated-approval",
     "access_note": "Requires a Brex business account; admins self-serve create scoped API tokens under Settings > Developer. Partner OAuth credentials are application-gated.",
     "api_surface": "REST",
     "api_breadth": "moderate",
@@ -1972,7 +1972,7 @@
       "OAuth2"
     ],
     "auth_note": "Google Cloud OAuth 2.0 bearer token (gcloud auth print-access-token); no consumer API key.",
-    "access": "gated-approval",
+    "access": "gated-partner",
     "access_note": "No public/consumer API. Only a NotebookLM Enterprise API on Google Cloud (Preview), requiring enterprise licensing and setup.",
     "api_surface": "REST",
     "api_breadth": "moderate",
