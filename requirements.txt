@@ -1,0 +1,5 @@
+# Research agent runtime
+anthropic>=0.40.0
+composio>=0.7.0
+composio_anthropic>=0.7.0
+python-dotenv>=1.0.0

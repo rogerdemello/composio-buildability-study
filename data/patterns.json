@@ -1,0 +1,238 @@
+{
+  "n": 100,
+  "auth": {
+    "OAuth2": 64,
+    "API Key": 42,
+    "Token": 41,
+    "Basic": 12,
+    "JWT": 6,
+    "PAT": 6,
+    "Other": 3,
+    "None": 2,
+    "HMAC-signed": 1
+  },
+  "access": {
+    "self-serve": 71,
+    "gated-approval": 11,
+    "gated-paid": 10,
+    "gated-partner": 3,
+    "sandbox-self-serve": 3,
+    "trial-only": 2
+  },
+  "api_surface": {
+    "REST": 84,
+    "REST+GraphQL": 9,
+    "GraphQL": 3,
+    "CLI-tool": 2,
+    "gRPC": 1,
+    "none": 1
+  },
+  "mcp": {
+    "official": 40,
+    "community": 32,
+    "none": 15,
+    "unknown": 13
+  },
+  "composio_toolkit": {
+    "yes": 56,
+    "no": 37,
+    "unknown": 7
+  },
+  "buildability": {
+    "easy": 61,
+    "moderate": 32,
+    "blocked": 7
+  },
+  "confidence": {
+    "high": 79,
+    "medium": 21
+  },
+  "gated_count": 24,
+  "gated_apps": [
+    "Copper",
+    "DealCloud",
+    "Pylon",
+    "Gladly",
+    "WhatsApp Business",
+    "Aircall",
+    "Google Ads",
+    "Meta Ads",
+    "LinkedIn Ads",
+    "Pinterest",
+    "Threads (Meta)",
+    "Salesforce Commerce Cloud",
+    "Squarespace",
+    "Amazon Selling Partner",
+    "SE Ranking",
+    "Ahrefs",
+    "Waterfall.io",
+    "Clay",
+    "Paygent Connect",
+    "PitchBook",
+    "NotebookLM",
+    "Otter AI",
+    "Consensus",
+    "Devin"
+  ],
+  "blocked_apps": [
+    "DealCloud",
+    "Gladly",
+    "Salesforce Commerce Cloud",
+    "Clay",
+    "Paygent Connect",
+    "PitchBook",
+    "NotebookLM"
+  ],
+  "easy_apps": [
+    "Salesforce",
+    "HubSpot",
+    "Pipedrive",
+    "Attio",
+    "Twenty",
+    "Close",
+    "Zendesk",
+    "Intercom",
+    "Freshdesk",
+    "Front",
+    "LiveAgent",
+    "Plain",
+    "Help Scout",
+    "Slack",
+    "Twilio",
+    "Zoho Cliq",
+    "Lark (Larksuite)",
+    "Discord",
+    "Telegram",
+    "Vonage",
+    "Mailchimp",
+    "Klaviyo",
+    "systeme.io",
+    "SendGrid",
+    "Shopify",
+    "WooCommerce",
+    "BigCommerce",
+    "Ecwid",
+    "Gumroad",
+    "DataForSEO",
+    "MrScraper",
+    "Apify",
+    "Firecrawl",
+    "Sherlock",
+    "GitHub",
+    "Vercel",
+    "Netlify",
+    "Cloudflare",
+    "Supabase",
+    "Neo4j",
+    "MongoDB Atlas",
+    "Datadog",
+    "Sentry",
+    "Notion",
+    "Airtable",
+    "Linear",
+    "Jira",
+    "Asana",
+    "Monday.com",
+    "ClickUp",
+    "Coda",
+    "Harvest",
+    "Stripe",
+    "iPayX",
+    "QuickBooks",
+    "Xero",
+    "Fathom",
+    "Reducto",
+    "Mermaid CLI",
+    "YouTube Transcript",
+    "Grain"
+  ],
+  "by_category_buildability": {
+    "CRM and Sales": {
+      "easy": 6,
+      "moderate": 3,
+      "blocked": 1
+    },
+    "Support and Helpdesk": {
+      "easy": 7,
+      "moderate": 2,
+      "blocked": 1
+    },
+    "Communications and Messaging": {
+      "easy": 7,
+      "moderate": 3
+    },
+    "Marketing, Ads, Email and Social": {
+      "moderate": 6,
+      "easy": 4
+    },
+    "Ecommerce": {
+      "easy": 5,
+      "blocked": 1,
+      "moderate": 4
+    },
+    "Data, SEO and Scraping": {
+      "easy": 5,
+      "moderate": 4,
+      "blocked": 1
+    },
+    "Developer, Infra and Data platforms": {
+      "easy": 9,
+      "moderate": 1
+    },
+    "Productivity and Project Management": {
+      "easy": 9,
+      "moderate": 1
+    },
+    "Finance and Fintech": {
+      "easy": 4,
+      "moderate": 4,
+      "blocked": 2
+    },
+    "AI, Research and Media-native": {
+      "blocked": 1,
+      "moderate": 4,
+      "easy": 5
+    }
+  },
+  "blockers": {
+    "Legacy platform under Citrix with uncertain ongoing investment; API self-serve but ecosystem/maintenance risk.": 1,
+    "OAuth2 self-client setup plus multi-region data-center routing add integration friction; otherwise obtainable free.": 1,
+    "No free tier: needs a paid (or time-limited trial) Copper account before the self-serve API key is reachable.": 1,
+    "No self-serve access: needs a licensed enterprise DealCloud/Intapp tenant and admin-provisioned API credentials.": 1,
+    "Paid product; requires a Pylon workspace and admin rights to obtain an API token.": 1,
+    "Paid product; requires a Gorgias account (trial) to generate the API key.": 1,
+    "No self-serve signup; requires an enterprise Gladly account (contact-sales) before you can create API tokens.": 1,
+    "Addon install requirement and narrow endpoint set (messages/reactions/channels).": 1,
+    "Meta business verification and app setup friction before production.": 1,
+    "Requires a paid Aircall subscription; OAuth distribution is partner-gated.": 1,
+    "Developer-token approval plus OAuth app setup and gRPC/client-library complexity.": 1,
+    "App Review and Business Verification required for advanced/third-party ad access.": 1,
+    "Marketing Developer Platform access approval and company verification.": 1,
+    "Requires a paid GoHighLevel subscription to have an account/data to operate on.": 1,
+    "Trial-to-Standard access approval (demo video review) needed for real production use.": 1,
+    "App Review required to publish/manage beyond test users.": 1,
+    "No self-serve instance; requires paid enterprise realm/sandbox credits.": 1,
+    "Requires standing up and hosting a Magento instance (heavy setup).": 1,
+    "Requires paid Commerce Advanced plan; OAuth path needs approval.": 1,
+    "Reviewed developer registration + Pro seller account, but self-obtainable with effort.": 1,
+    "Obscure vendor; primary docs login-gated and require a FanBasis merchant account to obtain keys.": 1,
+    "Paid subscription and API credits required to obtain a working key.": 1,
+    "Paid plan gate; meaningful volume needs expensive Advanced/Enterprise tiers.": 1,
+    "KYC/compliance approval for some scraping zones; usage-based cost.": 1,
+    "Paid B2B-data credentials required; obscure vendor, onboarding path unclear.": 1,
+    "No public retrieval API; external access limited to webhooks or Enterprise-gated lookup API.": 1,
+    "Key-pair/JWT auth setup complexity and trial-only free credentials.": 1,
+    "paid/trial account required to obtain API credentials": 1,
+    "Production access gated by Plaid approval and compliance review.": 1,
+    "KYC-verified account required for production keys; geo restrictions.": 1,
+    "Merchant contract with Paygent required; Japan-only, no self-serve signup, docs behind onboarding.": 1,
+    "Requires an approved Brex business account (US business underwriting) to obtain tokens.": 1,
+    "Production needs an approved Ramp business account; sandbox itself is self-serve.": 1,
+    "Enterprise contact-sales gate; paid standalone license, no self-serve credentials.": 1,
+    "No self-serve API; programmatic access is enterprise-only via a licensed Google Cloud NotebookLM Enterprise deployment.": 1,
+    "MCP/API access is gated behind enterprise plans (demo request), limiting self-serve building.": 1,
+    "Direct API access is by application only and paid per-call; MCP is easier but results are plan-limited.": 1,
+    "Programmatic API/MCP key requires a paid Team or Enterprise plan.": 1,
+    "Public Higgsfield Cloud REST API exists but docs are thin and usage is credit/paid.": 1
+  }
+}

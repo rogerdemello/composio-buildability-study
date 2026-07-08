@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Salesforce",
+    "auth_methods": ["OAuth2", "JWT"],
+    "access": "self-serve",
+    "api_surface": "REST+GraphQL",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm",
+    "confidence": "high",
+    "notes": "Free Developer Edition org lets you self-mint OAuth2 connected-app creds; REST/SOAP/GraphQL APIs plus first-party hosted MCP server (GA), so easy to build against."
+  },
+  {
+    "id": 10,
+    "name": "DealCloud",
+    "auth_methods": ["OAuth2", "API Key"],
+    "access": "gated-partner",
+    "api_surface": "REST",
+    "has_mcp": "none",
+    "buildability": "blocked",
+    "evidence_url": "https://api.docs.dealcloud.com/docs/apikeys",
+    "confidence": "medium",
+    "notes": "Enterprise Intapp product with no free tier; API key/clientId->OAuth token only obtainable by admin users inside a paying customer org (via CSM), so not self-obtainable."
+  },
+  {
+    "id": 11,
+    "name": "Zendesk",
+    "auth_methods": ["OAuth2", "Token", "Basic"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "community",
+    "buildability": "easy",
+    "evidence_url": "https://developer.zendesk.com/api-reference/introduction/security-and-auth/",
+    "confidence": "high",
+    "notes": "Free trial account lets you mint API tokens/OAuth clients yourself against the REST API; official MCP server is only EAP (summer 2026), community servers exist."
+  },
+  {
+    "id": 20,
+    "name": "Gladly",
+    "auth_methods": ["Basic", "Token"],
+    "access": "gated-partner",
+    "api_surface": "REST",
+    "has_mcp": "none",
+    "buildability": "blocked",
+    "evidence_url": "https://developer.gladly.com/rest/",
+    "confidence": "medium",
+    "notes": "Token-based Basic auth over REST, but tokens require the API User permission granted by an admin inside a paying Gladly org; no free developer signup, so not self-obtainable."
+  },
+  {
+    "id": 21,
+    "name": "Slack",
+    "auth_methods": ["OAuth2", "Token"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://docs.slack.dev/authentication/installing-with-oauth/",
+    "confidence": "high",
+    "notes": "Free workspace lets you create an app and self-mint OAuth2 bot/user tokens for the REST Web API; first-party MCP server (mcp.slack.com) GA, so easy to build against."
+  }
+]

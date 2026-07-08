@@ -1,0 +1,62 @@
+[
+  {
+    "id": 79,
+    "name": "Smartsheet",
+    "auth_methods": ["OAuth2", "Token"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://developers.smartsheet.com/api/smartsheet/guides/basics/authentication",
+    "confidence": "high",
+    "notes": "Free account self-generates a bearer access token (or 3-legged OAuth2) against a documented REST API; official MCP server at mcp.smartsheet.com is GA."
+  },
+  {
+    "id": 81,
+    "name": "Stripe",
+    "auth_methods": ["API Key", "OAuth2"],
+    "access": "sandbox-self-serve",
+    "api_surface": "REST",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://docs.stripe.com/api/authentication",
+    "confidence": "high",
+    "notes": "Self-serve signup yields test/sandbox and live secret API keys for a REST API (OAuth2 for Connect); official remote MCP server at mcp.stripe.com."
+  },
+  {
+    "id": 84,
+    "name": "Paygent Connect",
+    "auth_methods": ["Basic", "Other"],
+    "access": "gated-approval",
+    "api_surface": "REST",
+    "has_mcp": "none",
+    "buildability": "blocked",
+    "evidence_url": "https://www.paygent.co.jp/payment_service/connect/module_type/",
+    "confidence": "medium",
+    "notes": "Japanese payment gateway requiring a signed merchant contract plus client certificates and merchant_id/connect_id/connect_password credentials; no self-serve signup or public keys."
+  },
+  {
+    "id": 97,
+    "name": "higgsfield",
+    "auth_methods": ["API Key"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "community",
+    "buildability": "moderate",
+    "evidence_url": "https://cloud.higgsfield.ai/api-keys",
+    "confidence": "medium",
+    "notes": "Higgsfield Cloud offers self-serve API keys (Bearer) for a REST video/image-gen API with a Python SDK; docs sit behind login and only community MCP wrappers exist."
+  },
+  {
+    "id": 91,
+    "name": "NotebookLM",
+    "auth_methods": ["OAuth2"],
+    "access": "gated-approval",
+    "api_surface": "REST",
+    "has_mcp": "none",
+    "buildability": "blocked",
+    "evidence_url": "https://docs.cloud.google.com/gemini/enterprise/notebooklm-enterprise/docs/api-notebooks",
+    "confidence": "high",
+    "notes": "No standalone public API; only a Preview NotebookLM Enterprise REST API on Google Cloud requiring an org, NotebookLM Enterprise licenses, a GCP project and IAM roles (OAuth2 access tokens)."
+  }
+]

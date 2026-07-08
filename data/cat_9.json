@@ -1,0 +1,218 @@
+[
+  {
+    "id": 81,
+    "name": "Stripe",
+    "category": "Finance and Fintech",
+    "one_liner": "Online payment processing and financial infrastructure platform",
+    "auth_methods": [
+      "API Key",
+      "OAuth2"
+    ],
+    "auth_note": "Secret API keys sent as Bearer credential; OAuth2 for Connect platforms and the remote MCP server.",
+    "access": "self-serve",
+    "access_note": "Self-serve API keys with a full test/sandbox mode; live mode requires standard business account activation but no manual approval to develop.",
+    "api_surface": "REST",
+    "api_breadth": "broad",
+    "has_mcp": "official",
+    "mcp_note": "Official remote MCP server at mcp.stripe.com (~23 billing/payments tools) plus docs search; verified on docs.stripe.com/mcp.",
+    "composio_toolkit": "yes",
+    "buildability": "easy",
+    "main_blocker": "None; free self-serve test keys and broad REST API.",
+    "evidence_url": "https://docs.stripe.com/api",
+    "confidence": "high"
+  },
+  {
+    "id": 82,
+    "name": "Plaid",
+    "category": "Finance and Fintech",
+    "one_liner": "Bank-account data connectivity and financial account-linking API",
+    "auth_methods": [
+      "API Key"
+    ],
+    "auth_note": "client_id + secret passed in body or PLAID-CLIENT-ID / PLAID-SECRET headers (JSON over HTTPS).",
+    "access": "sandbox-self-serve",
+    "access_note": "Free Sandbox with self-serve client_id/secret on signup; Production access requested via Dashboard and subject to compliance/approval review.",
+    "api_surface": "REST",
+    "api_breadth": "broad",
+    "has_mcp": "unknown",
+    "mcp_note": "No confirmed official Plaid MCP server found.",
+    "composio_toolkit": "no",
+    "buildability": "moderate",
+    "main_blocker": "Production access gated by Plaid approval and compliance review.",
+    "evidence_url": "https://plaid.com/docs/api/",
+    "confidence": "high"
+  },
+  {
+    "id": 83,
+    "name": "Binance",
+    "category": "Finance and Fintech",
+    "one_liner": "Cryptocurrency exchange trading and market-data API",
+    "auth_methods": [
+      "API Key",
+      "HMAC-signed"
+    ],
+    "auth_note": "API key plus signed payload; signature via HMAC-SHA256 (or Ed25519/RSA keys) on signed endpoints. REST + WebSocket + FIX.",
+    "access": "sandbox-self-serve",
+    "access_note": "Spot/Futures testnet keys are self-serve; production API keys require a KYC-verified Binance account, with regional/geo restrictions.",
+    "api_surface": "REST",
+    "api_breadth": "broad",
+    "has_mcp": "community",
+    "mcp_note": "No official Binance MCP; several community Binance MCP servers exist.",
+    "composio_toolkit": "no",
+    "buildability": "moderate",
+    "main_blocker": "KYC-verified account required for production keys; geo restrictions.",
+    "evidence_url": "https://developers.binance.com/docs/binance-spot-api-docs",
+    "confidence": "high"
+  },
+  {
+    "id": 84,
+    "name": "Paygent Connect",
+    "category": "Finance and Fintech",
+    "one_liner": "Japanese online payment gateway with embedded checkout module",
+    "auth_methods": [
+      "Other",
+      "Basic"
+    ],
+    "auth_note": "Mutual-TLS client certificate plus merchant connection ID and connection password (configured in provided modules).",
+    "access": "gated-approval",
+    "access_note": "Requires a Paygent merchant contract (Japan); test and production module credentials/certs issued only after onboarding. No public self-serve API.",
+    "api_surface": "REST",
+    "api_breadth": "moderate",
+    "has_mcp": "none",
+    "mcp_note": "No MCP server.",
+    "composio_toolkit": "no",
+    "buildability": "blocked",
+    "main_blocker": "Merchant contract with Paygent required; Japan-only, no self-serve signup, docs behind onboarding.",
+    "evidence_url": "https://www.paygent.co.jp/payment_service/connect/module_type/",
+    "confidence": "medium"
+  },
+  {
+    "id": 85,
+    "name": "iPayX",
+    "category": "Finance and Fintech",
+    "one_liner": "FX forensic-audit MCP layer for cross-border payments",
+    "auth_methods": [
+      "API Key",
+      "Token"
+    ],
+    "auth_note": "Free tools (rate check, source compare, rate-limited audit) are unauthenticated; full forensic report requires a Bearer API key (paid per report).",
+    "access": "self-serve",
+    "access_note": "Public MCP endpoint, no signup for free/rate-limited tools; paid forensic reports gated behind an API key. FINTRAC-registered.",
+    "api_surface": "none",
+    "api_breadth": "narrow",
+    "has_mcp": "official",
+    "mcp_note": "The product IS an official MCP server (iPAYX-Technologies/mcp-fx-audit); marketed as first FX forensic-audit MCP. No conventional REST API; ipayx.ai/docs returns 404.",
+    "composio_toolkit": "no",
+    "buildability": "easy",
+    "main_blocker": "Narrow scope (FX audit only); full reports paid, but free tools are self-serve via public MCP.",
+    "evidence_url": "https://github.com/iPAYX-Technologies/mcp-fx-audit",
+    "confidence": "medium"
+  },
+  {
+    "id": 86,
+    "name": "QuickBooks",
+    "category": "Finance and Fintech",
+    "one_liner": "QuickBooks Online cloud accounting API",
+    "auth_methods": [
+      "OAuth2"
+    ],
+    "auth_note": "OAuth 2.0 only; no API keys or basic auth.",
+    "access": "self-serve",
+    "access_note": "Free developer account with up to 5 pre-populated sandbox companies; development self-serve, marketplace publishing needs Intuit review.",
+    "api_surface": "REST",
+    "api_breadth": "broad",
+    "has_mcp": "community",
+    "mcp_note": "No Intuit-official MCP; community and Composio-hosted QuickBooks MCP available.",
+    "composio_toolkit": "yes",
+    "buildability": "easy",
+    "main_blocker": "None for development; sandbox self-serve.",
+    "evidence_url": "https://developer.intuit.com/app/developer/qbo/docs/develop/authentication-and-authorization/oauth-2.0",
+    "confidence": "high"
+  },
+  {
+    "id": 87,
+    "name": "Xero",
+    "category": "Finance and Fintech",
+    "one_liner": "Xero cloud accounting API for small businesses",
+    "auth_methods": [
+      "OAuth2"
+    ],
+    "auth_note": "OAuth 2.0 required for all integrations; client id/secret from developer portal.",
+    "access": "self-serve",
+    "access_note": "Free Xero account with a demo company and self-serve app registration; uncertified public apps capped at 25 connections until app-store certification.",
+    "api_surface": "REST",
+    "api_breadth": "broad",
+    "has_mcp": "official",
+    "mcp_note": "Official MCP server XeroAPI/xero-mcp-server (@xeroapi/xero-mcp-server).",
+    "composio_toolkit": "yes",
+    "buildability": "easy",
+    "main_blocker": "None; demo company and app registration are self-serve.",
+    "evidence_url": "https://developer.xero.com/documentation/guides/oauth2/overview/",
+    "confidence": "high"
+  },
+  {
+    "id": 88,
+    "name": "Brex",
+    "category": "Finance and Fintech",
+    "one_liner": "Corporate cards and spend-management API",
+    "auth_methods": [
+      "Token",
+      "OAuth2"
+    ],
+    "auth_note": "User API tokens (Bearer) self-serve for account/card admins; OAuth 2.0 for partner apps authenticating other Brex accounts.",
+    "access": "self-serve",
+    "access_note": "Requires a Brex business account; admins self-serve create scoped API tokens under Settings > Developer. Partner OAuth credentials are application-gated.",
+    "api_surface": "REST",
+    "api_breadth": "moderate",
+    "has_mcp": "official",
+    "mcp_note": "Official Brex MCP documented at developer.brex.com/docs/mcp.",
+    "composio_toolkit": "yes",
+    "buildability": "moderate",
+    "main_blocker": "Requires an approved Brex business account (US business underwriting) to obtain tokens.",
+    "evidence_url": "https://developer.brex.com/guides/authentication",
+    "confidence": "high"
+  },
+  {
+    "id": 89,
+    "name": "Ramp",
+    "category": "Finance and Fintech",
+    "one_liner": "Corporate cards and finance-automation / spend-management API",
+    "auth_methods": [
+      "OAuth2"
+    ],
+    "auth_note": "OAuth 2.0 with client_credentials (server-to-server) and authorization_code (delegated) grants; additive scopes.",
+    "access": "sandbox-self-serve",
+    "access_note": "Free self-serve sandbox at demo-api.ramp.com with its own OAuth app/credentials; production requires a Ramp business account and production app credentials.",
+    "api_surface": "REST",
+    "api_breadth": "moderate",
+    "has_mcp": "official",
+    "mcp_note": "Official Ramp MCP server (ramp-public/ramp_mcp) documented at docs.ramp.com.",
+    "composio_toolkit": "yes",
+    "buildability": "moderate",
+    "main_blocker": "Production needs an approved Ramp business account; sandbox itself is self-serve.",
+    "evidence_url": "https://docs.ramp.com/developer-api/v1/authorization/oauth",
+    "confidence": "high"
+  },
+  {
+    "id": 90,
+    "name": "PitchBook",
+    "category": "Finance and Fintech",
+    "one_liner": "Private-capital market research data API (enterprise-gated)",
+    "auth_methods": [
+      "API Key",
+      "Token"
+    ],
+    "auth_note": "API key / auth token issued by PitchBook's Direct Data team after contract.",
+    "access": "gated-partner",
+    "access_note": "Standalone paid enterprise contract via the Direct Data team; a sandbox is provided only to contracted clients. No self-serve signup.",
+    "api_surface": "REST",
+    "api_breadth": "moderate",
+    "has_mcp": "unknown",
+    "mcp_note": "No public MCP; Premium Connectors integrate ChatGPT/Perplexity for enterprise-licensed clients only.",
+    "composio_toolkit": "no",
+    "buildability": "blocked",
+    "main_blocker": "Enterprise contact-sales gate; paid standalone license, no self-serve credentials.",
+    "evidence_url": "https://pitchbook.com/products/direct-access-data/api",
+    "confidence": "high"
+  }
+]

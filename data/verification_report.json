@@ -1,0 +1,35 @@
+{
+  "sample": 20,
+  "graded_fields": 100,
+  "before": 75,
+  "after": 96,
+  "explain": "An <b>independent</b> agent — a different, stronger model with an adversarial \"assume this is wrong\" prompt — re-researched the 20-app sample from scratch and was diffed against the first pass. Raw agreement was <b>75%</b> across 100 graded fields. Adjudicating every disagreement against primary docs by hand: <b>11 were genuine first-pass errors</b> (now fixed), <b>4 were the auditor's own mistakes</b> (first pass upheld), and 10 were vocabulary refinements. Re-graded against the docs, the corrected sample sits at <b>96%</b> — the rest is left honest for the genuinely ambiguous sandbox / enterprise edges. Separately, every one of the 100 evidence links was fetched: <b>99% resolved live</b>.",
+  "metrics": [
+    "20-app stratified sample · 2 per category",
+    "100 graded fields checked (5 × 20)",
+    "<b>75%</b> raw agreement w/ independent auditor",
+    "<b>11</b> genuine errors caught → fixed",
+    "<b>4</b> auditor errors → first pass upheld",
+    "<b>99%</b> evidence links resolved live"
+  ],
+  "diffs": [
+    {"app":"DealCloud","field":"MCP","first":"official","verified":"none","verdict":"miss","why":"First pass counted a speculative, not-yet-shipped MCP as official."},
+    {"app":"Slack","field":"MCP","first":"community","verified":"official","verdict":"miss","why":"Slack shipped a first-party MCP server (GA Feb 2026) — first pass missed it."},
+    {"app":"Smartsheet","field":"MCP","first":"unknown","verified":"official","verdict":"miss","why":"Smartsheet ships an official MCP server; first pass hedged to unknown."},
+    {"app":"Amazon Selling Partner","field":"Buildability","first":"blocked","verified":"moderate","verdict":"miss","why":"Developer registration + app review is self-obtainable with effort — 'blocked' overstated it."},
+    {"app":"Clay","field":"Access","first":"no-public-api","verified":"gated-paid","verdict":"miss","why":"A real (Enterprise-gated) lookup API exists — 'no public API' was too strong."},
+    {"app":"Clay","field":"API surface","first":"none","verified":"REST","verdict":"miss","why":"Follows from the above: there is a REST surface, just paywalled."},
+    {"app":"Clay","field":"MCP","first":"unknown","verified":"official","verdict":"miss","why":"Clay ships an official MCP server."},
+    {"app":"Firecrawl","field":"Auth","first":"API Key + OAuth2","verified":"API Key","verdict":"miss","why":"Firecrawl is API-key only; OAuth2 was an over-claim."},
+    {"app":"higgsfield","field":"API surface","first":"CLI-tool","verified":"REST","verdict":"miss","why":"A public Higgsfield Cloud REST API exists beyond the CLI."},
+    {"app":"higgsfield","field":"Auth","first":"API Key + OAuth2","verified":"API Key","verdict":"miss","why":"Bearer API key only; OAuth2 over-claimed."},
+    {"app":"higgsfield","field":"Buildability","first":"easy","verified":"moderate","verdict":"miss","why":"Thin docs + credit/paid usage make it moderate, not easy."},
+    {"app":"Aircall","field":"Access","first":"gated-paid","verified":"self-serve","verdict":"confirm","why":"Auditor wrong — API keys need a paid Aircall subscription. First pass upheld."},
+    {"app":"Stripe","field":"Access","first":"self-serve","verified":"sandbox-self-serve","verdict":"confirm","why":"Auditor wrong — Stripe live keys are self-serve on activation, no gate. First pass upheld."},
+    {"app":"Smartsheet","field":"Access","first":"trial-only","verified":"self-serve","verdict":"confirm","why":"Auditor wrong — Smartsheet API needs a paid/trial plan, no durable free tier. First pass upheld."},
+    {"app":"Smartsheet","field":"Buildability","first":"moderate","verified":"easy","verdict":"confirm","why":"Follows: paid-plan requirement keeps it moderate. First pass upheld."},
+    {"app":"Gladly","field":"Access","first":"gated-paid","verified":"gated-partner","verdict":"refine","why":"Both mean gated; 'gated-partner' (contact-sales, no signup) is more precise. Adopted."},
+    {"app":"Amazon Selling Partner","field":"MCP","first":"unknown","verified":"community","verdict":"refine","why":"Community SP-API MCP servers exist. Adopted."},
+    {"app":"Salesforce","field":"Auth","first":"OAuth2","verified":"OAuth2 + JWT","verdict":"refine","why":"JWT bearer flow is a real Salesforce auth path; tag completed."}
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 56,
+    "name": "Firecrawl",
+    "auth_methods": ["API Key"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://docs.firecrawl.dev/introduction",
+    "confidence": "high",
+    "notes": "Self-serve signup gives an fc- API key (bearer) with a free tier against a public REST API, so building is easy."
+  },
+  {
+    "id": 60,
+    "name": "Clay",
+    "auth_methods": ["API Key", "Token"],
+    "access": "gated-paid",
+    "api_surface": "REST",
+    "has_mcp": "official",
+    "buildability": "blocked",
+    "evidence_url": "https://university.clay.com/docs/using-clay-as-an-api",
+    "confidence": "high",
+    "notes": "Clay has no self-serve query API; only per-table webhooks/HTTP actions plus an Enterprise-only People & Company lookup API, so real data retrieval is gated to paid Enterprise."
+  },
+  {
+    "id": 61,
+    "name": "GitHub",
+    "auth_methods": ["PAT", "OAuth2", "JWT", "Basic", "Token"],
+    "access": "self-serve",
+    "api_surface": "REST+GraphQL",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api",
+    "confidence": "high",
+    "notes": "Anyone can self-serve a fine-grained/classic PAT (or OAuth/GitHub App JWT) against the public REST (and GraphQL) API, making it easy to build."
+  },
+  {
+    "id": 67,
+    "name": "Snowflake",
+    "auth_methods": ["OAuth2", "JWT", "Basic"],
+    "access": "trial-only",
+    "api_surface": "REST",
+    "has_mcp": "official",
+    "buildability": "moderate",
+    "evidence_url": "https://docs.snowflake.com/en/developer-guide/sql-api/authenticating",
+    "confidence": "high",
+    "notes": "SQL REST API uses key-pair JWT or OAuth and there is no permanent free tier (30-day/$400 trial only), so key-pair JWT setup plus trial gating make it moderate."
+  },
+  {
+    "id": 71,
+    "name": "Notion",
+    "auth_methods": ["OAuth2", "Token"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://developers.notion.com/reference/intro",
+    "confidence": "high",
+    "notes": "Self-serve internal integration token (bearer) or OAuth2 against a free public REST API makes building easy."
+  }
+]

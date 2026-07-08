@@ -1,0 +1,62 @@
+[
+  {
+    "id": 29,
+    "name": "Aircall",
+    "auth_methods": ["OAuth2", "Basic"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "community",
+    "buildability": "moderate",
+    "evidence_url": "https://developer.aircall.io/api-references/",
+    "confidence": "high",
+    "notes": "Customers self-mint api_id/api_token (Basic Auth) in company settings; OAuth2 is for marketplace apps. Requires a paid Aircall account, so moderate."
+  },
+  {
+    "id": 40,
+    "name": "SendGrid",
+    "auth_methods": ["API Key"],
+    "access": "self-serve",
+    "api_surface": "REST",
+    "has_mcp": "community",
+    "buildability": "easy",
+    "evidence_url": "https://www.twilio.com/docs/sendgrid/api-reference/how-to-use-the-sendgrid-v3-api/authentication",
+    "confidence": "high",
+    "notes": "Free self-serve signup lets you create a scoped API key sent as Bearer token; straightforward REST v3 API, so easy."
+  },
+  {
+    "id": 32,
+    "name": "Meta Ads",
+    "auth_methods": ["OAuth2"],
+    "access": "gated-approval",
+    "api_surface": "REST",
+    "has_mcp": "community",
+    "buildability": "moderate",
+    "evidence_url": "https://developers.facebook.com/docs/marketing-api/get-started/authentication/",
+    "confidence": "high",
+    "notes": "Signup is free and Standard access hits own ad accounts, but production/third-party use needs Advanced Access via App Review (gated-approval)."
+  },
+  {
+    "id": 41,
+    "name": "Shopify",
+    "auth_methods": ["OAuth2", "Token"],
+    "access": "self-serve",
+    "api_surface": "REST+GraphQL",
+    "has_mcp": "official",
+    "buildability": "easy",
+    "evidence_url": "https://shopify.dev/docs/api/usage/authentication",
+    "confidence": "high",
+    "notes": "Free dev store + custom app in admin self-generates an X-Shopify-Access-Token; public apps use OAuth. GraphQL is primary (REST legacy). Shopify ships official Dev/Storefront MCP servers."
+  },
+  {
+    "id": 49,
+    "name": "Amazon Selling Partner",
+    "auth_methods": ["OAuth2"],
+    "access": "gated-approval",
+    "api_surface": "REST",
+    "has_mcp": "community",
+    "buildability": "moderate",
+    "evidence_url": "https://developer-docs.amazon.com/sp-api/docs/authorizing-selling-partner-api-applications",
+    "confidence": "high",
+    "notes": "Must register as an SP-API developer (KYC) and register an app before LWA/OAuth2 auth; public apps require review, so gated-approval and moderate."
+  }
+]
