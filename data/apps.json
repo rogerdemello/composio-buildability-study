@@ -755,7 +755,7 @@
     "mcp_note": "No official MCP; Composio offers a Mailchimp toolkit.",
     "composio_toolkit": "yes",
     "buildability": "easy",
-    "main_blocker": "",
+    "main_blocker": "none",
     "evidence_url": "https://mailchimp.com/developer/marketing/docs/fundamentals/",
     "confidence": "high"
   },
@@ -777,7 +777,7 @@
     "mcp_note": "No confirmed official MCP; Composio offers a Klaviyo toolkit.",
     "composio_toolkit": "yes",
     "buildability": "easy",
-    "main_blocker": "",
+    "main_blocker": "none",
     "evidence_url": "https://developers.klaviyo.com/en/docs/authenticate_",
     "confidence": "high"
   },
@@ -798,7 +798,7 @@
     "mcp_note": "No known MCP server or Composio toolkit.",
     "composio_toolkit": "no",
     "buildability": "easy",
-    "main_blocker": "",
+    "main_blocker": "none",
     "evidence_url": "https://developer.systeme.io/reference/api",
     "confidence": "medium"
   },
@@ -861,7 +861,7 @@
     "mcp_note": "No official MCP; Composio offers a SendGrid toolkit.",
     "composio_toolkit": "yes",
     "buildability": "easy",
-    "main_blocker": "",
+    "main_blocker": "none",
     "evidence_url": "https://www.twilio.com/docs/sendgrid/api-reference",
     "confidence": "high"
   },

@@ -6091,7 +6091,7 @@
           "human_checked": false
         },
         "main_blocker": {
-          "value": "",
+          "value": "none",
           "confidence": 0.83,
           "sources": [
             {
@@ -6267,7 +6267,7 @@
           "human_checked": false
         },
         "main_blocker": {
-          "value": "",
+          "value": "none",
           "confidence": 0.83,
           "sources": [
             {
@@ -6430,7 +6430,7 @@
           "human_checked": false
         },
         "main_blocker": {
-          "value": "",
+          "value": "none",
           "confidence": 0.68,
           "sources": [
             {
@@ -6952,7 +6952,7 @@
           "human_checked": true
         },
         "main_blocker": {
-          "value": "",
+          "value": "none",
           "confidence": 0.83,
           "sources": [
             {
