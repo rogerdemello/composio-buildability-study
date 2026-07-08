@@ -327,10 +327,12 @@ footer .sig{margin-top:20px;font-size:12px;color:var(--faint);font-family:var(--
       <li><b>Access reclassification</b> — the score exposed apps the agent hedged as "moderate" that were really gated (SFCC, Brex) or really self-serve; a human set the access value the score keys off.</li>
     </ul></div>
   </div>
-  <div class="card" style="border-left:3px solid var(--warn);margin-top:16px">
-    <h3 style="color:var(--warn)">⚑ Honesty — what actually ran on Composio</h3>
+  <div class="card" style="border-left:3px solid var(--good);margin-top:16px">
+    <h3 style="color:var(--good)">✓ How Composio was used — and where it wasn't</h3>
     <p style="font-size:13px;color:var(--muted);line-height:1.55;margin:8px 0 0">
-      The pipeline in the repo (<code style="font-family:var(--mono);font-size:11.5px">providers/composio_search.py</code> + <code style="font-family:var(--mono);font-size:11.5px">agents/researcher.py</code>) is built to research each app with <b style="color:var(--ink)">Composio's own <code style="font-family:var(--mono);font-size:11.5px">COMPOSIO_SEARCH</code> tools</b> via the Composio SDK/MCP — that code is committed and runnable. For <b style="color:var(--ink)">this</b> submission the 100-app dataset was produced by the <b style="color:var(--ink)">same agent structure running inside Claude Code</b> (WebSearch/WebFetch sub-agents: 10 category researchers + 4 independent auditors) against the identical schema — not by the Composio path. The Composio MCP server is registered; a live Composio-powered run is one auth step away (AuthKit OAuth, or a Composio project API key for the SDK path). We flag this rather than imply Composio produced the numbers.
+      <b style="color:var(--ink)">Used for real:</b> the <code style="font-family:var(--mono);font-size:11.5px">composio_toolkit</code> column is ground-truthed against <b style="color:var(--ink)">Composio's live catalog via its own SDK</b> (<code style="font-family:var(--mono);font-size:11.5px">composio.toolkits.get()</code> — 1000+ toolkits — plus per-slug API checks). That check brought the column to <b style="color:var(--ink)">100% agreement</b> with Composio's catalog and corrected 4 rows the research LLM got wrong (Twilio, Clay, Devin → no; GoHighLevel → yes). See <code style="font-family:var(--mono);font-size:11.5px">database/verify_composio.py</code>.
+      <br><br>
+      <b style="color:var(--ink)">Not the Composio path (yet):</b> the per-app <i>doc research</i> (auth / access / API / MCP) was gathered by the same agent structure running as <b style="color:var(--ink)">Claude Code web-search sub-agents</b>, not Composio's <code style="font-family:var(--mono);font-size:11.5px">COMPOSIO_SEARCH</code> tool. That provider (<code style="font-family:var(--mono);font-size:11.5px">providers/composio_search.py</code>) is committed and runnable, and the Composio MCP server is registered — a full Composio-powered research run is one auth step away. We flag this rather than imply Composio produced every number.
     </p>
   </div>
 </div></section>

@@ -249,6 +249,12 @@ class MarkdownWriter:
         w("> Committed `output/*.json` is the run behind this doc, so it regenerates with **no API keys**.")
         w("")
         w("## Honesty notes")
+        w("- **How Composio was used:** the `composio_toolkit` column is ground-truthed against "
+          "Composio's live catalog via its **own SDK** (`composio.toolkits.get()` + per-slug API checks) — "
+          "**100% agreement**, and it corrected 4 LLM errors (Twilio/Clay/Devin → no, GoHighLevel → yes; "
+          "see `database/verify_composio.py`). The per-app *doc research* was gathered by Claude Code "
+          "web-search sub-agents, **not** the `COMPOSIO_SEARCH` path (that provider is committed & runnable, "
+          "MCP server registered — a full Composio-powered run is one auth step away). Flagged, not blurred.")
         w("- No paid accounts used; a payment/partnership gate reported with evidence *is* the finding.")
         w("- Confidence is per-field; lower-confidence values are flagged on the live page.")
         w(f"- Verification graded {verify.get('graded_fields', 80)} input fields on a "

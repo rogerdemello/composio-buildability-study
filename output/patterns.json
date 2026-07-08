@@ -27,9 +27,9 @@
       "evidence_count": 43
     },
     {
-      "title": "Composio already covers the majority — and the gaps are legible",
-      "detail": "56 of 100 already have a Composio toolkit. The 37 'no' rows are the clearest expansion targets, and most of them (e.g. Plain, Pylon, Smartsheet, Ecwid, GoHighLevel) are self-serve — build-ready, just not built yet.",
-      "evidence_count": 37
+      "title": "Composio already covers over half — and the gaps are legible",
+      "detail": "54 of 100 already have a Composio toolkit (verified against Composio's live catalog via its SDK). The 39 'no' rows are the clearest expansion targets, and most (e.g. Twenty, Podio, LiveAgent, Pumble, Vonage) are self-serve — build-ready, just not built yet.",
+      "evidence_count": 39
     }
   ],
   "easy_wins": [
@@ -53,9 +53,9 @@
     "access": {"self-serve": 69, "gated-approval": 10, "gated-paid": 9, "gated-partner": 6, "trial-only": 3, "sandbox-self-serve": 3},
     "api_surface": {"REST": 84, "REST+GraphQL": 9, "GraphQL": 3, "CLI-tool": 2, "gRPC": 1, "none": 1},
     "mcp": {"official": 40, "community": 32, "none": 15, "unknown": 13},
-    "composio": {"yes": 56, "no": 37, "unknown": 7},
+    "composio": {"yes": 54, "no": 39, "unknown": 7},
     "buildability": {"easy": 70, "moderate": 24, "blocked": 6},
     "self_serve": 75,
-    "avg_score": 73.0
+    "avg_score": 72.9
   }
 }

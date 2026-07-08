@@ -22,14 +22,14 @@
 
 **05. Easy wins cluster by category** — Productivity (10/10 easy), Dev/Infra (9/10), and CRM / Support / Comms (8/10 each) are near-uniformly self-serve. Marketing/Ads is the outlier — only 4/10 easy — because every ad platform gates access behind app review.
 
-**06. Composio already covers the majority — and the gaps are legible** — 56 of 100 already have a Composio toolkit. The 37 'no' rows are the clearest expansion targets, and most of them (e.g. Plain, Pylon, Smartsheet, Ecwid, GoHighLevel) are self-serve — build-ready, just not built yet.
+**06. Composio already covers over half — and the gaps are legible** — 54 of 100 already have a Composio toolkit (verified against Composio's live catalog via its SDK). The 39 'no' rows are the clearest expansion targets, and most (e.g. Twenty, Podio, LiveAgent, Pumble, Vonage) are self-serve — build-ready, just not built yet.
 
 | Metric | Value |
 |---|---|
 | Buildable today (score ≥ 68) | **70** / 100 |
 | Developer can self-serve credentials | **75** / 100 |
 | Ship an official MCP server | **40** / 100 |
-| Already a Composio toolkit | **56** / 100 |
+| Already a Composio toolkit | **54** / 100 |
 | Buildability split | 🟢 70 easy · 🟡 24 moderate · 🔴 6 blocked |
 
 ---
@@ -136,7 +136,7 @@ Score is the quantified verdict (easy ≥ 68 · moderate 34–67 · blocked < 34
 | 19 | **Gorgias** | Support | Ecommerce-focused helpdesk for Shopify support teams. | Basic+API Key+OAuth2 | self-serve | REST | community | yes | 87 | 🟢 |
 | 20 | **Gladly**† | Support | Enterprise people-centered customer service and support platform. | Token+Basic | gated-partner | REST | none | no | 11 | 🔴 |
 | 21 | **Slack**† | Comms | Team messaging and collaboration platform | OAuth2+Token | self-serve | REST | official | yes | 97 | 🟢 |
-| 22 | **Twilio** | Comms | Programmable SMS, voice and messaging APIs | Basic+API Key | self-serve | REST | official | yes | 93 | 🟢 |
+| 22 | **Twilio** | Comms | Programmable SMS, voice and messaging APIs | Basic+API Key | self-serve | REST | official | no | 88 | 🟢 |
 | 23 | **Zoho Cliq** | Comms | Zoho team chat and collaboration app | OAuth2 | self-serve | REST | unknown | no | 73 | 🟢 |
 | 24 | **Lark (Larksuite)** | Comms | Enterprise messaging, docs and collaboration suite | OAuth2+Token | self-serve | REST | official | no | 92 | 🟢 |
 | 25 | **Pumble** | Comms | Team chat app, Slack-style messaging | API Key | self-serve | REST | community | no | 75 | 🟢 |
@@ -148,7 +148,7 @@ Score is the quantified verdict (easy ≥ 68 · moderate 34–67 · blocked < 34
 | 31 | **Google Ads** | Marketing | Google's advertising platform API for campaign management | OAuth2 | gated-approval | gRPC | community | yes | 42 | 🟡 |
 | 32 | **Meta Ads**† | Marketing | Meta Marketing API for Facebook and Instagram ad campaigns | OAuth2 | gated-approval | REST | community | yes | 50 | 🟡 |
 | 33 | **LinkedIn Ads** | Marketing | LinkedIn Marketing API for ad campaigns and reporting | OAuth2 | gated-approval | REST | community | yes | 50 | 🟡 |
-| 34 | **GoHighLevel** | Marketing | White-label agency CRM and marketing automation platform API | OAuth2+Token | trial-only | REST | unknown | no | 58 | 🟡 |
+| 34 | **GoHighLevel** | Marketing | White-label agency CRM and marketing automation platform API | OAuth2+Token | trial-only | REST | unknown | yes | 63 | 🟡 |
 | 35 | **Mailchimp** | Marketing | Email marketing platform with a REST Marketing API | API Key+OAuth2 | self-serve | REST | community | yes | 92 | 🟢 |
 | 36 | **Klaviyo** | Marketing | Email and SMS marketing automation platform API | API Key+OAuth2 | self-serve | REST | community | yes | 92 | 🟢 |
 | 37 | **systeme.io** | Marketing | All-in-one funnel builder and marketing platform with public API | API Key | self-serve | REST | none | no | 70 | 🟢 |
@@ -174,7 +174,7 @@ Score is the quantified verdict (easy ≥ 68 · moderate 34–67 · blocked < 34
 | 57 | **Bright Data** | Data/SEO | Web data platform: proxies, Web Unlocker, SERP and scrapers. | API Key+Basic | self-serve | REST | official | yes | 93 | 🟢 |
 | 58 | **Sherlock** | Data/SEO | Open-source CLI to hunt usernames across 400+ social networks. | None | self-serve | CLI-tool | none | no | 50 | 🟡 |
 | 59 | **Waterfall.io** | Data/SEO | B2B contact and company data waterfall enrichment API. | API Key | gated-paid | REST | none | no | 37 | 🟡 |
-| 60 | **Clay**† | Data/SEO | GTM data enrichment and automation platform, no standalone public API. | API Key+Token | gated-paid | REST | official | yes | 49 | 🟡 |
+| 60 | **Clay**† | Data/SEO | GTM data enrichment and automation platform, no standalone public API. | API Key+Token | gated-paid | REST | official | no | 44 | 🟡 |
 | 61 | **GitHub**† | Dev/Infra | Code hosting, version control and CI/CD platform. | PAT+OAuth2+Token+JWT | self-serve | REST+GraphQL | official | yes | 97 | 🟢 |
 | 62 | **Vercel** | Dev/Infra | Frontend cloud for deploying and hosting web apps. | Token+OAuth2 | self-serve | REST | official | yes | 97 | 🟢 |
 | 63 | **Netlify** | Dev/Infra | Web hosting and serverless platform for frontend sites. | PAT+OAuth2 | self-serve | REST | official | no | 87 | 🟢 |
@@ -210,7 +210,7 @@ Score is the quantified verdict (easy ≥ 68 · moderate 34–67 · blocked < 34
 | 93 | **Fathom** | AI/Media | AI meeting notetaker with transcripts and summaries | API Key+OAuth2 | self-serve | REST | community | yes | 87 | 🟢 |
 | 94 | **Consensus** | AI/Media | AI search engine over scientific research papers | OAuth2+API Key | gated-approval | REST | official | unknown | 46 | 🟡 |
 | 95 | **Reducto** | AI/Media | Document parsing and extraction API for AI | API Key | self-serve | REST | unknown | unknown | 73 | 🟢 |
-| 96 | **Devin** | AI/Media | Autonomous AI software engineer agent | API Key | gated-paid | REST | official | yes | 52 | 🟡 |
+| 96 | **Devin** | AI/Media | Autonomous AI software engineer agent | API Key | gated-paid | REST | official | no | 47 | 🟡 |
 | 97 | **higgsfield**† | AI/Media | AI image, video and media generation suite | API Key | self-serve | REST | community | unknown | 83 | 🟢 |
 | 98 | **Mermaid CLI** | AI/Media | Open-source CLI rendering Mermaid diagrams to images | None | self-serve | CLI-tool | none | no | 50 | 🟡 |
 | 99 | **YouTube Transcript** | AI/Media | Third-party API for YouTube video transcripts | API Key | self-serve | REST | unknown | unknown | 70 | 🟢 |
@@ -311,6 +311,7 @@ python main.py md                  # render this CASE_STUDY.md
 > Committed `output/*.json` is the run behind this doc, so it regenerates with **no API keys**.
 
 ## Honesty notes
+- **How Composio was used:** the `composio_toolkit` column is ground-truthed against Composio's live catalog via its **own SDK** (`composio.toolkits.get()` + per-slug API checks) — **100% agreement**, and it corrected 4 LLM errors (Twilio/Clay/Devin → no, GoHighLevel → yes; see `database/verify_composio.py`). The per-app *doc research* was gathered by Claude Code web-search sub-agents, **not** the `COMPOSIO_SEARCH` path (that provider is committed & runnable, MCP server registered — a full Composio-powered run is one auth step away). Flagged, not blurred.
 - No paid accounts used; a payment/partnership gate reported with evidence *is* the finding.
 - Confidence is per-field; lower-confidence values are flagged on the live page.
 - Verification graded 80 input fields on a 20-app stratified sample — the accuracy number is the sample's.

@@ -3699,7 +3699,7 @@
       "id": 22,
       "name": "Twilio",
       "category": "Communications and Messaging",
-      "buildability_score": 93,
+      "buildability_score": 88,
       "score_breakdown": [
         {
           "points": 8,
@@ -3724,10 +3724,6 @@
         {
           "points": 10,
           "reason": "Official MCP server"
-        },
-        {
-          "points": 5,
-          "reason": "Already a Composio toolkit (proven integrable)"
         },
         {
           "points": 32,
@@ -3824,7 +3820,7 @@
           "human_checked": false
         },
         "composio_toolkit": {
-          "value": "yes",
+          "value": "no",
           "confidence": 0.8,
           "sources": [
             {
@@ -5766,7 +5762,7 @@
       "id": 34,
       "name": "GoHighLevel",
       "category": "Marketing, Ads, Email and Social",
-      "buildability_score": 58,
+      "buildability_score": 63,
       "score_breakdown": [
         {
           "points": 8,
@@ -5791,6 +5787,10 @@
         {
           "points": 10,
           "reason": "API breadth: broad"
+        },
+        {
+          "points": 5,
+          "reason": "Already a Composio toolkit (proven integrable)"
         },
         {
           "points": 8,
@@ -5887,7 +5887,7 @@
           "human_checked": false
         },
         "composio_toolkit": {
-          "value": "no",
+          "value": "yes",
           "confidence": 0.66,
           "sources": [
             {
@@ -10241,7 +10241,7 @@
       "id": 60,
       "name": "Clay",
       "category": "Data, SEO and Scraping",
-      "buildability_score": 49,
+      "buildability_score": 44,
       "score_breakdown": [
         {
           "points": 8,
@@ -10266,10 +10266,6 @@
         {
           "points": 10,
           "reason": "Official MCP server"
-        },
-        {
-          "points": 5,
-          "reason": "Already a Composio toolkit (proven integrable)"
         },
         {
           "points": -4,
@@ -10366,7 +10362,7 @@
           "human_checked": true
         },
         "composio_toolkit": {
-          "value": "yes",
+          "value": "no",
           "confidence": 0.66,
           "sources": [
             {
@@ -16537,7 +16533,7 @@
       "id": 96,
       "name": "Devin",
       "category": "AI, Research and Media-native",
-      "buildability_score": 52,
+      "buildability_score": 47,
       "score_breakdown": [
         {
           "points": 8,
@@ -16562,10 +16558,6 @@
         {
           "points": 10,
           "reason": "Official MCP server"
-        },
-        {
-          "points": 5,
-          "reason": "Already a Composio toolkit (proven integrable)"
         },
         {
           "points": -4,
@@ -16661,7 +16653,7 @@
           "human_checked": false
         },
         "composio_toolkit": {
-          "value": "yes",
+          "value": "no",
           "confidence": 0.8,
           "sources": [
             {

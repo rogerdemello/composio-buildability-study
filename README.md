@@ -128,6 +128,7 @@ python main.py verify --sample 20    # 3. independent audit + accuracy
 python main.py patterns              # 4. LLM pattern engine
 python main.py report                # 5. render web/index.html
 python main.py md                    # 6. render CASE_STUDY.md
+python -m database.verify_composio   # 7. ground-truth composio_toolkit via Composio SDK
 # or: python main.py all
 ```
 
@@ -135,8 +136,20 @@ python main.py md                    # 6. render CASE_STUDY.md
 > the findings and regenerate the report (`python main.py report`) with **no API keys**. Re-running
 > `research`/`verify` refreshes them live.
 
+## How Composio was used (and where it wasn't)
+- **Used for real — verifying the `composio_toolkit` column.** `database/verify_composio.py` pulls Composio's
+  live catalog through the **Composio SDK** (`composio.toolkits.get()`, 1000+ toolkits) plus per-slug API checks,
+  and cross-checks every app's `composio_toolkit` value. It brought that column to **100% agreement** with
+  Composio's catalog and corrected 4 rows the research LLM got wrong (Twilio, Clay, Devin → `no`; GoHighLevel → `yes`).
+  Output: `output/composio_catalog_check.json`.
+- **Not the Composio path (yet) — the doc research.** The per-app auth/access/API/MCP research was gathered by the
+  *same agent structure running inside Claude Code* (WebSearch/WebFetch sub-agents), **not** Composio's
+  `COMPOSIO_SEARCH` tool. That provider (`providers/composio_search.py`) is committed and runnable, and the Composio
+  MCP server is registered (`claude mcp add … composio …`); a full Composio-powered research run is one auth step
+  away (AuthKit OAuth for MCP, or a Composio **project** `ak_` key for the SDK path — the MCP *consumer* `ck_` key is
+  not accepted by the REST/SDK API). Flagged here, not blurred.
+
 ## Honesty notes
-- **What ran on Composio:** the pipeline (`providers/composio_search.py` + `agents/researcher.py`) is *built* to research via Composio's `COMPOSIO_SEARCH` tools over the SDK/MCP, and that code is committed and runnable. The **committed 100-app dataset**, however, was produced by the *same agent structure running inside Claude Code* (WebSearch/WebFetch sub-agents) against the identical schema — **not** by the Composio path. The Composio MCP server is registered (`claude mcp add … composio …`); a live Composio run needs one auth step (AuthKit OAuth for MCP, or a Composio **project** API key for the SDK path — note the MCP *consumer* key is not accepted by the REST/SDK API). Flagged here, not blurred.
 - No paid accounts were used. A payment/partnership gate reported with evidence *is* the finding, not a failure.
 - Confidence is per-field and visible in every provenance popup; lower-confidence values are dotted amber.
 - Verification graded 80 input fields on a 20-app stratified sample — the accuracy number is the sample's.
