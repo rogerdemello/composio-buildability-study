@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "name": "Salesforce",
+    "category": "CRM and Sales",
+    "buildability_score": 83,
+    "score_breakdown": [
+      {
+        "points": 8,
+        "reason": "Base"
+      },
+      {
+        "points": 8,
+        "reason": "Usable API auth (OAuth2, Other)"
+      },
+      {
+        "points": 4,
+        "reason": "OAuth2 supported"
+      },
+      {
+        "points": 16,
+        "reason": "Documented REST API"
+      },
+      {
+        "points": 5,
+        "reason": "API breadth: moderate"
+      },
+      {
+        "points": 10,
+        "reason": "Official MCP server"
+      },
+      {
+        "points": 32,
+        "reason": "Access: self-serve"
+      }
+    ],
+    "app_confidence": 0.5,
+    "fields": {
+      "one_liner": {
+        "value": "Salesforce API",
+        "confidence": 0.9,
+        "sources": [
+          {
+            "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "auth_methods": {
+        "value": [
+          "OAuth2",
+          "Other"
+        ],
+        "confidence": 0.8,
+        "sources": [
+          {
+            "url": "https://www.flosum.com/blog/securing-your-salesforce-data-using-api-authentication",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "access": {
+        "value": "self-serve",
+        "confidence": 0.7,
+        "sources": [
+          {
+            "url": "https://www.integrate.io/blog/salesforce-rest-api-integration",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "api_surface": {
+        "value": "REST",
+        "confidence": 0.9,
+        "sources": [
+          {
+            "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "api_breadth": {
+        "value": "moderate",
+        "confidence": 0.7,
+        "sources": [
+          {
+            "url": "https://www.integrate.io/blog/salesforce-rest-api-integration",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "has_mcp": {
+        "value": "official",
+        "confidence": 0.9,
+        "sources": [
+          {
+            "url": "https://developer.salesforce.com/docs/platform/graphql/guide/intro-graphql-api.html",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "composio_toolkit": {
+        "value": "no",
+        "confidence": 0.5,
+        "sources": [
+          {
+            "url": "https://www.linkedin.com/posts/cramm_so-why-should-salesforce-architects-and-activity-7267443522486652929-Gf2h",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "buildability": {
+        "value": "moderate",
+        "confidence": 0.7,
+        "sources": [
+          {
+            "url": "https://www.integrate.io/blog/salesforce-rest-api-integration",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      },
+      "main_blocker": {
+        "value": "none",
+        "confidence": 0.6,
+        "sources": [
+          {
+            "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm",
+            "retrieved_by": "tavily",
+            "snippet": ""
+          }
+        ],
+        "verifier": "unknown",
+        "verifier_note": "",
+        "human_checked": false
+      }
+    }
+  }
+]

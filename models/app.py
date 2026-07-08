@@ -190,6 +190,85 @@ def score_buildability(app: AppResult) -> tuple[int, list[dict]]:
     return total, breakdown
 
 
+def _norm_auth(v) -> list[str]:
+    out = []
+    for x in (v if isinstance(v, list) else [v]):
+        s = str(x).lower()
+        if "oauth" in s: out.append("OAuth2")
+        elif "jwt" in s: out.append("JWT")
+        elif "hmac" in s: out.append("HMAC-signed")
+        elif "pat" in s or "personal access" in s: out.append("PAT")
+        elif "api key" in s or "apikey" in s or "api-key" in s: out.append("API Key")
+        elif "token" in s: out.append("Token")
+        elif "basic" in s: out.append("Basic")
+        elif "key" in s: out.append("API Key")
+        elif "none" in s or s in ("", "n/a"): out.append("None")
+        else: out.append("Other")
+    seen = []
+    for a in out:
+        if a not in seen: seen.append(a)
+    return seen or ["Other"]
+
+
+def _norm_access(v) -> str:
+    s = str(v).lower()
+    if "no public" in s or "no-public" in s or "no api" in s: return "no-public-api"
+    if "waitlist" in s: return "waitlist"
+    if "sandbox" in s or "testnet" in s: return "sandbox-self-serve"
+    if "partner" in s or "contact" in s or "enterprise" in s or "sales" in s: return "gated-partner"
+    if "approval" in s or "review" in s or "kyc" in s or "verif" in s or "dev token" in s: return "gated-approval"
+    if "trial" in s: return "trial-only"
+    if "paid" in s or "subscription" in s: return "gated-paid"
+    if "self" in s or "public" in s or "free" in s: return "self-serve"
+    return "self-serve"
+
+
+def _norm_surface(v) -> str:
+    s = str(v).lower()
+    r, g = "rest" in s, "graphql" in s
+    if r and g: return "REST+GraphQL"
+    if g: return "GraphQL"
+    if r: return "REST"
+    if "grpc" in s: return "gRPC"
+    if "soap" in s: return "SOAP"
+    if "cli" in s: return "CLI-tool"
+    if "sdk" in s: return "SDK-only"
+    if "none" in s or "no api" in s: return "none"
+    return "REST"
+
+
+def _pick(v, allowed, default):
+    s = str(v).lower().strip()
+    for a in allowed:
+        if a.lower() in s:
+            return a
+    return default
+
+
+def normalize_record(rec: dict) -> dict:
+    """Map an LLM's free-text field values onto the controlled vocab.
+
+    Different providers (NVIDIA NIM, Anthropic, …) phrase enums differently
+    ("OAuth 2.0" vs "OAuth2", "public self-serve API" vs "self-serve"); this keeps
+    the dataset clean and the score correct regardless of which model produced it.
+    """
+    def val(k):
+        c = rec.get(k)
+        return c.get("value") if isinstance(c, dict) else c
+
+    def setv(k, v):
+        if isinstance(rec.get(k), dict): rec[k]["value"] = v
+        else: rec[k] = v
+
+    if "auth_methods" in rec: setv("auth_methods", _norm_auth(val("auth_methods")))
+    if "access" in rec: setv("access", _norm_access(val("access")))
+    if "api_surface" in rec: setv("api_surface", _norm_surface(val("api_surface")))
+    if "api_breadth" in rec: setv("api_breadth", _pick(val("api_breadth"), API_BREADTH, "moderate"))
+    if "has_mcp" in rec: setv("has_mcp", _pick(val("has_mcp"), MCP_STATUS, "unknown"))
+    if "composio_toolkit" in rec: setv("composio_toolkit", _pick(val("composio_toolkit"), COMPOSIO_TOOLKIT, "unknown"))
+    return rec
+
+
 def verdict_from_score(score: int) -> str:
     if score >= 68:
         return "easy"

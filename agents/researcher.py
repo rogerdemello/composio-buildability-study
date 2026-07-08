@@ -9,7 +9,7 @@ from __future__ import annotations
 import asyncio
 
 from llm import LLM
-from models.app import AppResult, Evidence, Field, score_buildability
+from models.app import AppResult, Evidence, Field, normalize_record, score_buildability
 from prompts import RESEARCH_SYSTEM, RESEARCH_USER, EXTRACT_INSTRUCTION
 
 # per-field object: value + confidence + evidence_url
@@ -94,6 +94,7 @@ class ResearchAgent:
             tool_name="emit_record", tool_desc=EMIT_RECORD["description"],
             schema=EMIT_RECORD["input_schema"], max_tokens=2000,
         )
+        rec = normalize_record(rec)   # map free-text model output onto the controlled vocab
 
         result = AppResult(id=app["id"], name=app["name"], category=app["category"])
         for key in ["one_liner", "auth_methods", "access", "api_surface", "api_breadth",
