@@ -29,4 +29,10 @@ class ReportWriter:
 
         out = config.WEB / "index.html"
         out.write_text(tpl, encoding="utf-8")
+
+        # also publish to docs/ for GitHub Pages (public live link)
+        docs = config.ROOT / "docs"
+        docs.mkdir(exist_ok=True)
+        (docs / "index.html").write_text(tpl, encoding="utf-8")
+        (docs / ".nojekyll").write_text("", encoding="utf-8")  # serve as-is, no Jekyll
         return str(out)
