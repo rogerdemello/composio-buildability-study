@@ -17,7 +17,7 @@ import asyncio
 import json
 
 import config
-from agents import PatternAnalyzer, ReportWriter, ResearchAgent, VerifyAgent
+from agents import MarkdownWriter, PatternAnalyzer, ReportWriter, ResearchAgent, VerifyAgent
 from database.store import Store
 
 
@@ -116,9 +116,14 @@ def _report():
     print("report -> web/index.html")
 
 
+def _md():
+    MarkdownWriter().build()
+    print("markdown -> CASE_STUDY.md")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["research", "verify", "patterns", "report", "all"])
+    ap.add_argument("cmd", choices=["research", "verify", "patterns", "report", "md", "all"])
     ap.add_argument("--ids"); ap.add_argument("--golden", action="store_true")
     ap.add_argument("--sample", type=int, default=config.VERIFY_SAMPLE)
     a = ap.parse_args()
@@ -132,11 +137,14 @@ def main():
         asyncio.run(_patterns())
     elif a.cmd == "report":
         _report()
+    elif a.cmd == "md":
+        _md()
     elif a.cmd == "all":
         asyncio.run(_research(ids, a.golden))
         asyncio.run(_verify(a.sample))
         asyncio.run(_patterns())
         _report()
+        _md()
 
 
 if __name__ == "__main__":

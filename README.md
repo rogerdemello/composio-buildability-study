@@ -9,7 +9,8 @@
 > async orchestration, a browser fallback, an LLM pattern engine, and a report generated from JSON.
 
 **📊 Live case study:** https://rogerdemello.github.io/composio-buildability-study/
-**📦 This repo:** the agent, the verification loop, and the raw data behind every number on the page.
+**📄 Markdown case study:** [CASE_STUDY.md](CASE_STUDY.md) — the same findings, portable & GitHub-rendered
+**📦 This repo:** the agent, the verification loop, and the raw data behind every number.
 
 ---
 
@@ -34,7 +35,8 @@ research-agent/
 │  ├─ researcher.py        # app -> AppResult, each field w/ value+confidence+evidence
 │  ├─ verifier.py          # independent adversarial re-check + evidence liveness
 │  ├─ pattern_analyzer.py  # LLM over the whole dataset -> insights (grounded in counts)
-│  └─ report_writer.py     # renders the case study straight from JSON
+│  ├─ report_writer.py     # renders the HTML case study straight from JSON
+│  └─ markdown_writer.py   # renders CASE_STUDY.md from the same JSON
 ├─ providers/
 │  ├─ composio_search.py   # Composio's own COMPOSIO_SEARCH tools (dogfooding)
 │  ├─ tavily.py  firecrawl.py  docs_fetcher.py
@@ -111,6 +113,7 @@ python main.py research              # 2. scale to all 100 (async, resumable)
 python main.py verify --sample 20    # 3. independent audit + accuracy
 python main.py patterns              # 4. LLM pattern engine
 python main.py report                # 5. render web/index.html
+python main.py md                    # 6. render CASE_STUDY.md
 # or: python main.py all
 ```
 
