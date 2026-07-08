@@ -17,7 +17,7 @@ import asyncio
 import json
 
 import config
-from agents import MarkdownWriter, PatternAnalyzer, ReportWriter, ResearchAgent, VerifyAgent
+from agents import MarkdownWriter, PatternAnalyzer, ReportWriter, ResearchAgent, TextWriter, VerifyAgent
 from database.store import Store
 
 
@@ -121,9 +121,14 @@ def _md():
     print("markdown -> CASE_STUDY.md")
 
 
+def _txt():
+    TextWriter().build()
+    print("text -> CASE_STUDY.txt")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["research", "verify", "patterns", "report", "md", "all"])
+    ap.add_argument("cmd", choices=["research", "verify", "patterns", "report", "md", "txt", "all"])
     ap.add_argument("--ids"); ap.add_argument("--golden", action="store_true")
     ap.add_argument("--sample", type=int, default=config.VERIFY_SAMPLE)
     a = ap.parse_args()
@@ -139,12 +144,15 @@ def main():
         _report()
     elif a.cmd == "md":
         _md()
+    elif a.cmd == "txt":
+        _txt()
     elif a.cmd == "all":
         asyncio.run(_research(ids, a.golden))
         asyncio.run(_verify(a.sample))
         asyncio.run(_patterns())
         _report()
         _md()
+        _txt()
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@
 
 **📊 Live case study:** https://rogerdemello.github.io/composio-buildability-study/
 **📄 Markdown case study:** [CASE_STUDY.md](CASE_STUDY.md) — the same findings, portable & GitHub-rendered
+**📝 Plain-text case study:** [CASE_STUDY.txt](CASE_STUDY.txt) — copy-paste into Word/Docs
 **📦 This repo:** the agent, the verification loop, and the raw data behind every number.
 
 ---
@@ -128,6 +129,7 @@ python main.py verify --sample 20    # 3. independent audit + accuracy
 python main.py patterns              # 4. LLM pattern engine
 python main.py report                # 5. render web/index.html
 python main.py md                    # 6. render CASE_STUDY.md
+python main.py txt                   # 6b. render CASE_STUDY.txt (Word/Docs paste)
 python -m database.verify_composio   # 7. ground-truth composio_toolkit via Composio SDK
 # or: python main.py all
 ```

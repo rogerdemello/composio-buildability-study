@@ -1,0 +1,405 @@
+COMPOSIO - 100-APP AGENT-TOOLKIT BUILDABILITY STUDY
+====================================================
+AI Product Ops take-home - case study
+
+An async agent pipeline researched 100 apps against their live developer
+docs, scored each app's buildability, and attached evidence + confidence to
+every field. An independent agent then audited a sample to prove the numbers.
+
+Live case study : https://rogerdemello.github.io/composio-buildability-study/
+Source repo     : https://github.com/rogerdemello/composio-buildability-study
+
+At a glance: 100 apps | 10 categories | avg buildability score 73/100 | accuracy 73%->96% verified
+
+1. THE HEADLINE
+===============
+THE ONE-SENTENCE FINDING:
+  The 100 split cleanly: 70 are buildable as agent toolkits today — and almost every app that
+  isn't is blocked by a business rule (sales, approval, enterprise contract), not by a missing
+  or bad API.
+
+01. The blocker is commercial, not technical
+    Only 1 of 100 apps has no usable API surface at all. The 30 that aren't 'easy' are gated
+    by app-review/dev-token approval (10), paid plans (9), or partner/enterprise contracts
+    (6) — business gates, not engineering ones. The toolkit backlog is a sales-and-
+    partnerships problem more than a build problem.
+
+02. REST is the universal substrate; GraphQL is a rounding error
+    84 apps expose plain REST and another 9 add GraphQL alongside it; only 3 are GraphQL-
+    first (Linear, Monday, Plain). A REST-first integration layer covers essentially the
+    whole market.
+
+03. OAuth2 dominates — but never alone
+    64 apps support OAuth2, yet 83 also offer a simpler API-key or token path (42 key + 41
+    token). The auth layer must do both: OAuth for user-context/marketplace apps, keys for
+    single-tenant. Basic auth is effectively dead (12, all legacy).
+
+04. MCP has already gone mainstream
+    40 apps ship an official first-party MCP server and 32 more have community ones — 72 of
+    100 are already MCP-reachable. It is concentrated in Dev/Infra and Productivity, where
+    it is now table stakes.
+
+05. Easy wins cluster by category
+    Productivity (10/10 easy), Dev/Infra (9/10), and CRM / Support / Comms (8/10 each) are
+    near-uniformly self-serve. Marketing/Ads is the outlier — only 4/10 easy — because every
+    ad platform gates access behind app review.
+
+06. Composio already covers over half — and the gaps are legible
+    54 of 100 already have a Composio toolkit (verified against Composio's live catalog via
+    its SDK). The 39 'no' rows are the clearest expansion targets, and most (e.g. Twenty,
+    Podio, LiveAgent, Pumble, Vonage) are self-serve — build-ready, just not built yet.
+
+
+2. KEY NUMBERS
+==============
+  Buildable today (score >= 68) ....... 70 / 100
+  Buildable with friction (34-67) ..... 24 / 100
+  Blocked (< 34) ...................... 6 / 100
+  Developer can self-serve creds ...... 75 / 100
+  Ship an official MCP server ......... 40 / 100
+  Already a Composio toolkit .......... 54 / 100
+
+3. THE PATTERNS
+===============
+
+Auth methods (apps support more than one)
+-----------------------------------------
+  OAuth2               ######################## 64
+  API Key              ################ 42
+  Token                ############### 41
+  Basic                #### 12
+  JWT                  ## 6
+  PAT                  ## 6
+  Other                # 3
+  None                 # 2
+  HMAC-signed           1
+
+Access - can a developer self-serve credentials?
+------------------------------------------------
+  self-serve           ######################## 69
+  gated-approval       ### 10
+  gated-paid           ### 9
+  gated-partner        ## 6
+  trial-only           # 3
+  sandbox-self-serve   # 3
+
+API surface
+-----------
+  REST                 ######################## 84
+  REST+GraphQL         ### 9
+  GraphQL              # 3
+  CLI-tool             # 2
+  gRPC                  1
+  none                  1
+
+MCP availability
+----------------
+  official             ######################## 40
+  community            ################### 32
+  none                 ######### 15
+  unknown              ######## 13
+
+Buildability by category (easy / moderate / blocked, out of 10)
+---------------------------------------------------------------
+  CRM and Sales                              8 / 1 / 1
+  Support and Helpdesk                       8 / 1 / 1
+  Communications and Messaging               8 / 2 / 0
+  Marketing, Ads, Email and Social           4 / 6 / 0
+  Ecommerce                                  7 / 2 / 1
+  Data, SEO and Scraping                     5 / 5 / 0
+  Developer, Infra and Data platforms        9 / 1 / 0
+  Productivity and Project Management        10 / 0 / 0
+  Finance and Fintech                        6 / 2 / 2
+  AI, Research and Media-native              5 / 4 / 1
+
+Easy wins (just build it)
+-------------------------
+  Notion, Linear, Asana, ClickUp, Coda, GitHub, Vercel, Supabase, Sentry, Cloudflare,
+  HubSpot, Close, Pipedrive, Attio, Intercom, Front, Help Scout, Shopify, Stripe, SendGrid,
+  Klaviyo, Mailchimp
+
+Needs outreach (gated behind sales / approval / partnership)
+------------------------------------------------------------
+  DealCloud, Gladly, Salesforce Commerce Cloud, PitchBook, NotebookLM, Paygent Connect,
+  Google Ads, Meta Ads, LinkedIn Ads, Amazon Selling Partner, WhatsApp Business
+
+Surprises
+---------
+  - Fintech quietly leads on MCP: Stripe, Brex, Ramp, Xero and iPayX all ship official MCP
+    servers — a regulated, conservative category out ahead of the agent-native shift.
+  - Marketing/Ads is the hardest category to integrate, not the easiest — every major ad
+    platform (Google, Meta, LinkedIn, Pinterest) gates real access behind an app-review/dev-
+    token approval.
+  - NotebookLM, one of the most-requested AI products, has no standalone public API at all —
+    only a licensed enterprise API on Google Cloud.
+
+4. THE 100 APPS
+===============
+Format:  App  ->  auth | access | api | mcp | composio | score/100 (verdict)
+Score is the quantified verdict; gated access is hard-capped so a strong API you
+cannot get credentials for cannot score 'easy'. [H] = human-checked (audited sample).
+
+CRM and Sales
+-------------
+   1. Salesforce                 -> OAuth2+JWT     | self-serve         | REST+GraphQL | official  | composio:yes | 93 (easy) [H]
+   2. HubSpot                    -> OAuth2+Token   | self-serve         | REST+GraphQL | official  | composio:yes | 97 (easy)
+   3. Pipedrive                  -> Token+OAuth2   | self-serve         | REST         | community | composio:yes | 92 (easy)
+   4. Attio                      -> Token+OAuth2   | self-serve         | REST         | official  | composio:yes | 92 (easy)
+   5. Twenty                     -> Token+OAuth2   | self-serve         | REST+GraphQL | community | composio:no  | 82 (easy)
+   6. Podio                      -> OAuth2         | self-serve         | REST         | unknown   | composio:no  | 78 (easy)
+   7. Zoho CRM                   -> OAuth2         | self-serve         | REST         | community | composio:yes | 88 (easy)
+   8. Close                      -> API Key+OAuth2 | self-serve         | REST         | official  | composio:yes | 97 (easy)
+   9. Copper                     -> API Key+OAuth2 | gated-paid         | REST         | community | composio:no  | 46 (moderate)
+  10. DealCloud                  -> OAuth2+API Key | gated-partner      | REST         | none      | composio:no  | 15 (blocked) [H]
+
+Support and Helpdesk
+--------------------
+  11. Zendesk                    -> OAuth2+Token+Basic | self-serve         | REST         | community | composio:yes | 92 (easy) [H]
+  12. Intercom                   -> OAuth2+Token   | self-serve         | REST         | official  | composio:yes | 97 (easy)
+  13. Freshdesk                  -> API Key+Basic  | self-serve         | REST         | community | composio:yes | 88 (easy)
+  14. Front                      -> Token+OAuth2   | self-serve         | REST         | community | composio:yes | 92 (easy)
+  15. Pylon                      -> Token          | gated-paid         | REST         | unknown   | composio:no  | 37 (moderate)
+  16. LiveAgent                  -> API Key        | self-serve         | REST         | unknown   | composio:no  | 73 (easy)
+  17. Plain                      -> API Key        | self-serve         | GraphQL      | community | composio:yes | 83 (easy)
+  18. Help Scout                 -> OAuth2         | self-serve         | REST         | community | composio:yes | 88 (easy)
+  19. Gorgias                    -> Basic+API Key+OAuth2 | self-serve         | REST         | community | composio:yes | 87 (easy)
+  20. Gladly                     -> Token+Basic    | gated-partner      | REST         | none      | composio:no  | 11 (blocked) [H]
+
+Communications and Messaging
+----------------------------
+  21. Slack                      -> OAuth2+Token   | self-serve         | REST         | official  | composio:yes | 97 (easy) [H]
+  22. Twilio                     -> Basic+API Key  | self-serve         | REST         | official  | composio:no  | 88 (easy)
+  23. Zoho Cliq                  -> OAuth2         | self-serve         | REST         | unknown   | composio:no  | 73 (easy)
+  24. Lark (Larksuite)           -> OAuth2+Token   | self-serve         | REST         | official  | composio:no  | 92 (easy)
+  25. Pumble                     -> API Key        | self-serve         | REST         | community | composio:no  | 75 (easy)
+  26. Discord                    -> OAuth2+Token   | self-serve         | REST         | community | composio:yes | 92 (easy)
+  27. Telegram                   -> Token          | self-serve         | REST         | community | composio:yes | 83 (easy)
+  28. WhatsApp Business          -> OAuth2+Token   | gated-approval     | REST         | community | composio:yes | 49 (moderate)
+  29. Aircall                    -> Basic+OAuth2   | gated-paid         | REST         | community | composio:no  | 42 (moderate) [H]
+  30. Vonage                     -> API Key+JWT    | self-serve         | REST         | unknown   | composio:no  | 78 (easy)
+
+Marketing, Ads, Email and Social
+--------------------------------
+  31. Google Ads                 -> OAuth2         | gated-approval     | gRPC         | community | composio:yes | 42 (moderate)
+  32. Meta Ads                   -> OAuth2         | gated-approval     | REST         | community | composio:yes | 50 (moderate) [H]
+  33. LinkedIn Ads               -> OAuth2         | gated-approval     | REST         | community | composio:yes | 50 (moderate)
+  34. GoHighLevel                -> OAuth2+Token   | trial-only         | REST         | unknown   | composio:yes | 63 (moderate)
+  35. Mailchimp                  -> API Key+OAuth2 | self-serve         | REST         | community | composio:yes | 92 (easy)
+  36. Klaviyo                    -> API Key+OAuth2 | self-serve         | REST         | community | composio:yes | 92 (easy)
+  37. systeme.io                 -> API Key        | self-serve         | REST         | none      | composio:no  | 70 (easy)
+  38. Pinterest                  -> OAuth2         | gated-approval     | REST         | none      | composio:no  | 40 (moderate)
+  39. Threads (Meta)             -> OAuth2         | gated-approval     | REST         | none      | composio:no  | 35 (moderate)
+  40. SendGrid                   -> API Key        | self-serve         | REST         | community | composio:yes | 88 (easy) [H]
+
+Ecommerce
+---------
+  41. Shopify                    -> OAuth2+Token   | self-serve         | REST+GraphQL | official  | composio:yes | 97 (easy) [H]
+  42. WooCommerce                -> API Key+Basic+Other | self-serve         | REST         | community | composio:no  | 83 (easy)
+  43. BigCommerce                -> OAuth2+Token   | self-serve         | REST+GraphQL | unknown   | composio:no  | 82 (easy)
+  44. Salesforce Commerce Cloud  -> OAuth2         | gated-partner      | REST         | none      | composio:unknown | 16 (blocked)
+  45. Magento (Adobe Commerce)   -> OAuth2+Token+JWT | self-serve         | REST+GraphQL | unknown   | composio:no  | 82 (easy)
+  46. Squarespace                -> API Key+OAuth2 | gated-paid         | REST         | none      | composio:no  | 41 (moderate)
+  47. Ecwid                      -> OAuth2+Token   | self-serve         | REST         | none      | composio:no  | 77 (easy)
+  48. Gumroad                    -> OAuth2+Token   | self-serve         | REST         | community | composio:yes | 84 (easy)
+  49. Amazon Selling Partner     -> OAuth2         | gated-approval     | REST         | community | composio:no  | 45 (moderate) [H]
+  50. fanbasis                   -> API Key        | self-serve         | REST         | none      | composio:no  | 73 (easy)
+
+Data, SEO and Scraping
+----------------------
+  51. DataForSEO                 -> Basic          | self-serve         | REST         | official  | composio:yes | 89 (easy)
+  52. SE Ranking                 -> Token+API Key  | gated-paid         | REST         | official  | composio:no  | 52 (moderate)
+  53. Ahrefs                     -> Token+API Key  | gated-paid         | REST         | official  | composio:yes | 57 (moderate)
+  54. MrScraper                  -> Token+API Key  | self-serve         | REST         | none      | composio:no  | 73 (easy)
+  55. Apify                      -> Token+API Key  | self-serve         | REST         | official  | composio:yes | 93 (easy)
+  56. Firecrawl                  -> API Key        | self-serve         | REST         | official  | composio:yes | 88 (easy) [H]
+  57. Bright Data                -> API Key+Basic  | self-serve         | REST         | official  | composio:yes | 93 (easy)
+  58. Sherlock                   -> None           | self-serve         | CLI-tool     | none      | composio:no  | 50 (moderate)
+  59. Waterfall.io               -> API Key        | gated-paid         | REST         | none      | composio:no  | 37 (moderate)
+  60. Clay                       -> API Key+Token  | gated-paid         | REST         | official  | composio:no  | 44 (moderate) [H]
+
+Developer, Infra and Data platforms
+-----------------------------------
+  61. GitHub                     -> PAT+OAuth2+Token+JWT | self-serve         | REST+GraphQL | official  | composio:yes | 97 (easy) [H]
+  62. Vercel                     -> Token+OAuth2   | self-serve         | REST         | official  | composio:yes | 97 (easy)
+  63. Netlify                    -> PAT+OAuth2     | self-serve         | REST         | official  | composio:no  | 87 (easy)
+  64. Cloudflare                 -> Token+API Key  | self-serve         | REST+GraphQL | official  | composio:yes | 93 (easy)
+  65. Supabase                   -> Token+API Key+OAuth2 | self-serve         | REST+GraphQL | official  | composio:yes | 97 (easy)
+  66. Neo4j                      -> Basic+Token+OAuth2 | self-serve         | REST         | official  | composio:yes | 92 (easy)
+  67. Snowflake                  -> OAuth2+JWT     | trial-only         | REST         | official  | composio:yes | 64 (moderate) [H]
+  68. MongoDB Atlas              -> OAuth2+API Key | self-serve         | REST         | official  | composio:no  | 92 (easy)
+  69. Datadog                    -> API Key+Token  | self-serve         | REST         | official  | composio:yes | 93 (easy)
+  70. Sentry                     -> Token+OAuth2   | self-serve         | REST         | official  | composio:yes | 97 (easy)
+
+Productivity and Project Management
+-----------------------------------
+  71. Notion                     -> OAuth2+Token+PAT | self-serve         | REST         | official  | composio:yes | 97 (easy) [H]
+  72. Airtable                   -> OAuth2+PAT     | self-serve         | REST         | community | composio:yes | 87 (easy)
+  73. Linear                     -> OAuth2+API Key | self-serve         | GraphQL      | official  | composio:yes | 97 (easy)
+  74. Jira                       -> OAuth2+Basic+JWT | self-serve         | REST         | official  | composio:yes | 93 (easy)
+  75. Asana                      -> OAuth2+PAT+Other | self-serve         | REST         | official  | composio:yes | 97 (easy)
+  76. Monday.com                 -> OAuth2+Token   | self-serve         | GraphQL      | official  | composio:yes | 97 (easy)
+  77. ClickUp                    -> OAuth2+Token   | self-serve         | REST         | community | composio:yes | 92 (easy)
+  78. Coda                       -> API Key+Token  | self-serve         | REST         | community | composio:yes | 83 (easy)
+  79. Smartsheet                 -> OAuth2+Token   | trial-only         | REST         | official  | composio:no  | 68 (easy) [H]
+  80. Harvest                    -> OAuth2+PAT     | self-serve         | REST         | community | composio:yes | 87 (easy)
+
+Finance and Fintech
+-------------------
+  81. Stripe                     -> API Key+OAuth2 | self-serve         | REST         | official  | composio:yes | 97 (easy) [H]
+  82. Plaid                      -> API Key        | sandbox-self-serve | REST         | unknown   | composio:no  | 68 (easy)
+  83. Binance                    -> API Key+HMAC-signed | sandbox-self-serve | REST         | community | composio:no  | 73 (easy)
+  84. Paygent Connect            -> Other+Basic    | gated-partner      | REST         | none      | composio:no  | 7 (blocked) [H]
+  85. iPayX                      -> API Key+Token  | self-serve         | none         | official  | composio:no  | 52 (moderate)
+  86. QuickBooks                 -> OAuth2         | self-serve         | REST         | community | composio:yes | 88 (easy)
+  87. Xero                       -> OAuth2         | self-serve         | REST         | official  | composio:yes | 93 (easy)
+  88. Brex                       -> Token+OAuth2   | gated-approval     | REST         | official  | composio:yes | 54 (moderate)
+  89. Ramp                       -> OAuth2         | sandbox-self-serve | REST         | official  | composio:yes | 78 (easy)
+  90. PitchBook                  -> API Key+Token  | gated-partner      | REST         | unknown   | composio:no  | 11 (blocked)
+
+AI, Research and Media-native
+-----------------------------
+  91. NotebookLM                 -> OAuth2         | gated-partner      | REST         | none      | composio:no  | 11 (blocked) [H]
+  92. Otter AI                   -> OAuth2         | gated-approval     | REST         | official  | composio:unknown | 45 (moderate)
+  93. Fathom                     -> API Key+OAuth2 | self-serve         | REST         | community | composio:yes | 87 (easy)
+  94. Consensus                  -> OAuth2+API Key | gated-approval     | REST         | official  | composio:unknown | 46 (moderate)
+  95. Reducto                    -> API Key        | self-serve         | REST         | unknown   | composio:unknown | 73 (easy)
+  96. Devin                      -> API Key        | gated-paid         | REST         | official  | composio:no  | 47 (moderate)
+  97. higgsfield                 -> API Key        | self-serve         | REST         | community | composio:unknown | 83 (easy) [H]
+  98. Mermaid CLI                -> None           | self-serve         | CLI-tool     | none      | composio:no  | 50 (moderate)
+  99. YouTube Transcript         -> API Key        | self-serve         | REST         | unknown   | composio:unknown | 70 (easy)
+  100. Grain                      -> Token+OAuth2   | self-serve         | REST         | unknown   | composio:unknown | 77 (easy)
+
+5. THE AGENT THAT DID IT
+========================
+A modular pipeline built on Composio's own SDK + search tools:
+
+  providers  : composio_search -> tavily -> firecrawl -> docs_fetcher -> browser*
+               (* Playwright browser is a fallback, only when docs are JS-walled)
+  researcher : each app -> a structured record where every FIELD carries its own
+               value + confidence + evidence URL (async, Semaphore(5), resumable)
+  verifier   : a different, stronger model re-checks a sample adversarially, and
+               every evidence URL is fetched for a live 200
+  patterns   : an LLM reads the whole dataset for the insights above,
+               grounded in code-computed counts so it cannot invent a number
+  writers    : the HTML page, this text, and the Markdown are all rendered from JSON
+
+6. HOW COMPOSIO WAS USED (AND WHERE IT WAS NOT)
+===============================================
+USED FOR REAL - verifying the 'composio_toolkit' column:
+  database/verify_composio.py pulls Composio's live catalog through the Composio
+  SDK (composio.toolkits.get(), 1000+ toolkits) plus per-slug API checks, and
+  cross-checks every app's composio_toolkit value. It reached 100.0% agreement with
+  Composio's catalog and corrected 4 rows the research LLM got wrong
+  (Twilio, Clay, Devin -> no; GoHighLevel -> yes).
+
+NOT THE COMPOSIO PATH (yet) - the doc research:
+  The per-app auth/access/API/MCP research was gathered by the same agent
+  structure running as Claude Code web-search sub-agents, not Composio's
+  COMPOSIO_SEARCH tool. That provider (providers/composio_search.py) is committed
+  and runnable, and the Composio MCP server is registered - a full Composio-powered
+  research run is one auth step away. Flagged here, not blurred.
+
+7. WHERE A HUMAN WAS NEEDED
+===========================
+  - Login-gated / thin docs (fanbasis, iPayX, Paygent, higgsfield) - the agent cannot read
+    behind a login wall, so it downgraded confidence and a human made the call.
+  - Sandbox vs production fintech splits ('sandbox-self-serve') - a judgment the rubric
+    could not fully encode.
+  - Composio catalog stubs - a toolkit page with 0 tools is not real coverage.
+  - Access reclassification - the score exposed hedged 'moderate' calls that were really
+    gated (SFCC, Brex) or really self-serve; a human set the access value the score keys
+    off.
+
+8. HOW IT WAS BUILT
+===================
+  1. Perfect on 5, then scale. Tuned on 5 golden apps across five auth models
+     (Salesforce, HubSpot, Slack, Stripe, Shopify), then scaled to 100.
+  2. Async fan-out under Semaphore(5), resumable so a crash never re-does work.
+  3. Score, don't guess - buildability is a weighted 0-100 score; verdict = band.
+  4. Verify + lift - independent audit + evidence-liveness moved accuracy up.
+
+9. IS IT TRUSTWORTHY?
+=====================
+Graded input-field accuracy on the sample:  73%  ->  96%
+
+An independent agent — a different, stronger model with an adversarial "assume this is
+wrong" prompt — re-researched the 20-app sample from scratch and was diffed against the
+first pass. Raw agreement was 73% across 80 graded input fields. Adjudicating every
+disagreement against primary docs by hand: 9 were genuine first-pass errors (now fixed), 3
+were the auditor's own mistakes (first pass upheld), and 10 were vocabulary refinements.
+Re-graded against the docs, the corrected sample sits at 96% — the rest is left honest for
+the genuinely ambiguous sandbox / enterprise edges. Separately, every one of the 100
+evidence links was fetched: 99% resolved live.
+
+Checks:
+  - 20-app stratified sample · 2 per category
+  - 80 input fields checked (4 × 20)
+  - 73% raw agreement w/ independent auditor
+  - 9 genuine errors caught → fixed
+  - 3 auditor errors → first pass upheld
+  - 99% evidence links resolved live
+
+Hits and misses (shown honestly)
+--------------------------------
+  App                        Field          First pass             Verified               Verdict
+  DealCloud                  MCP            official               none                   miss
+  Slack                      MCP            community              official               miss
+  Smartsheet                 MCP            unknown                official               miss
+  Clay                       Access         no-public-api          gated-paid             miss
+  Clay                       API surface    none                   REST                   miss
+  Clay                       MCP            unknown                official               miss
+  Firecrawl                  Auth           API Key + OAuth2       API Key                miss
+  higgsfield                 API surface    CLI-tool               REST                   miss
+  higgsfield                 Auth           API Key + OAuth2       API Key                miss
+  Aircall                    Access         gated-paid             self-serve             confirm
+  Stripe                     Access         self-serve             sandbox-self-serve     confirm
+  Smartsheet                 Access         trial-only             self-serve             confirm
+  Gladly                     Access         gated-paid             gated-partner          refine
+  Amazon Selling Partner     MCP            unknown                community              refine
+  Salesforce                 Auth           OAuth2                 OAuth2 + JWT           refine
+  GitHub                     Auth           PAT + OAuth2           + JWT (GitHub App)     refine
+
+  (miss = first pass wrong, fixed | confirm = auditor wrong, first pass upheld |
+   refine = both defensible, more precise value adopted)
+
+10. WHAT DEFEATED THE AGENT
+===========================
+  Paygent Connect:
+    Genuinely defeated us. Japanese, contract-only, mutual-TLS certificates, no self-
+    serve. The brief's 'NMI-powered' hint appears wrong; we report that rather than guess.
+  NotebookLM:
+    No standalone public API - only a licensed enterprise API on Google Cloud. A valid
+    'blocked' finding, not a gap in the research.
+  fanbasis / iPayX:
+    Core developer docs sit behind a login wall; read the public reference, flagged low
+    confidence.
+  higgsfield:
+    Thin, fast-moving docs; real self-serve REST API confirmed but breadth uncertain ->
+    mid-band score.
+
+11. RUN IT YOURSELF
+===================
+  pip install -r requirements.txt
+  cp .env.example .env      # set NVIDIA_API_KEY (default backend)
+
+  python main.py research --golden   # perfect the pipeline on 5 apps
+  python main.py research            # scale to all 100 (async, resumable)
+  python main.py verify --sample 20  # independent audit + accuracy
+  python main.py patterns            # LLM pattern engine
+  python main.py report              # render the HTML page
+  python main.py md                  # render the Markdown case study
+  python -m database.verify_composio # ground-truth the toolkit column via Composio SDK
+
+12. HONESTY NOTES
+=================
+  - No paid accounts were used. A payment/partnership gate reported with evidence IS the
+    finding.
+  - Confidence is per field, not per app; lower-confidence values are flagged on the live
+    page.
+  - Verification graded 80 input fields on a 20-app stratified sample - the accuracy number is
+    the sample's.
+  - Only the audited sample is human-checked; the rest carry the agent's own confidence. That
+    distinction is shown, not blurred.
+
+Generated from output/results.json + output/patterns.json + verification data
+by agents/text_writer.py - the same source as the live page.
