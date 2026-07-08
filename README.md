@@ -45,6 +45,7 @@ research-agent/
 │  ├─ app.py               # Field (per-field provenance) + buildability score rubric
 │  └─ result.py            # run container + serialization
 ├─ prompts/                # versioned LLM prompts (researcher / verifier / patterns)
+├─ llm.py                  # provider-agnostic client: NVIDIA NIM (default) or Anthropic
 ├─ database/
 │  ├─ store.py             # resumable JSON store (idempotent by app id)
 │  └─ build_results.py     # lifts the verified dataset into the provenance model
@@ -69,6 +70,19 @@ value: "official"                     (Slack.has_mcp)
 
 On the live page, **click any coloured value** in the table to see this chain. That is the artifact a
 Product Ops reviewer actually needs — not "this app is 90% right", but "this *field* is verified, and here's the receipt".
+
+### LLM backend — swappable in one env var
+
+The agents don't hardcode a vendor. `llm.py` wraps a single primitive ("force a structured tool
+call") over two backends, chosen by `LLM_PROVIDER`:
+
+| `LLM_PROVIDER` | Backend | Default models (research / verify+pattern) |
+|---|---|---|
+| `nvidia` *(default)* | NVIDIA NIM (OpenAI-compatible, build.nvidia.com) | `meta/llama-3.3-70b-instruct` / `meta/llama-3.1-405b-instruct` |
+| `anthropic` | Anthropic Claude | `claude-sonnet-5` / `claude-opus-4-8` |
+
+The verifier deliberately runs a **larger, different** model than the researcher, so the audit is a
+genuine second opinion rather than the same model re-reading itself.
 
 ### Buildability score (justify "easy", don't assert it)
 
@@ -106,7 +120,7 @@ for can't score "easy". The verdict is the score band (easy ≥ 68 · moderate 3
 ```bash
 pip install -r requirements.txt
 playwright install chromium          # only if you want the browser fallback
-cp .env.example .env                 # add ANTHROPIC_API_KEY (+ COMPOSIO/TAVILY/FIRECRAWL if you have them)
+cp .env.example .env                 # set NVIDIA_API_KEY (default backend); COMPOSIO/TAVILY/FIRECRAWL optional
 
 python main.py research --golden     # 1. perfect the pipeline on 5 apps
 python main.py research              # 2. scale to all 100 (async, resumable)

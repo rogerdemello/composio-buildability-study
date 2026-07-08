@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 
+from llm import LLM
 from models.app import AppResult, Evidence, Field, score_buildability
 from prompts import RESEARCH_SYSTEM, RESEARCH_USER, EXTRACT_INSTRUCTION
 
@@ -48,13 +49,11 @@ EMIT_RECORD = {
 
 
 class ResearchAgent:
-    def __init__(self, providers, model="claude-sonnet-5", client=None):
+    def __init__(self, providers, model=None, provider=None, llm=None):
+        import config
         self.providers = providers            # search + fetch providers, in preference order
-        self.model = model
-        if client is None:
-            from anthropic import AsyncAnthropic
-            client = AsyncAnthropic()
-        self.client = client
+        self.model = model or config.RESEARCH_MODEL
+        self.llm = llm or LLM(self.model, provider)
 
     async def _gather(self, app: dict, k: int = 4) -> list:
         """Run the search providers concurrently; return deduped candidate docs."""
@@ -87,15 +86,14 @@ class ResearchAgent:
         # map url -> which provider surfaced it, for provenance
         provider_of = {d.url: d.retrieved_by for d in docs}
 
-        msg = await self.client.messages.create(
-            model=self.model, max_tokens=2000, system=RESEARCH_SYSTEM,
-            tools=[EMIT_RECORD], tool_choice={"type": "tool", "name": "emit_record"},
-            messages=[{"role": "user", "content":
-                       RESEARCH_USER.format(name=app["name"], category=app["category"],
-                                            hint=app.get("hint", ""), context=self._context(docs))
-                       + "\n\n" + EXTRACT_INSTRUCTION}],
+        rec = await self.llm.structured(
+            system=RESEARCH_SYSTEM,
+            user=RESEARCH_USER.format(name=app["name"], category=app["category"],
+                                      hint=app.get("hint", ""), context=self._context(docs))
+                 + "\n\n" + EXTRACT_INSTRUCTION,
+            tool_name="emit_record", tool_desc=EMIT_RECORD["description"],
+            schema=EMIT_RECORD["input_schema"], max_tokens=2000,
         )
-        rec = next(b.input for b in msg.content if getattr(b, "type", None) == "tool_use")
 
         result = AppResult(id=app["id"], name=app["name"], category=app["category"])
         for key in ["one_liner", "auth_methods", "access", "api_surface", "api_breadth",

@@ -7,8 +7,7 @@ that feed back into each Field's confidence and verifier state.
 
 from __future__ import annotations
 
-import json
-
+from llm import LLM
 from models.app import AppResult, Verifier
 from prompts import VERIFY_SYSTEM, VERIFY_USER
 from providers.docs_fetcher import DocsFetcher
@@ -26,29 +25,27 @@ EMIT_VERDICTS = {
 
 
 class VerifyAgent:
-    def __init__(self, researcher, model="claude-opus-4-8", client=None):
+    def __init__(self, researcher, model=None, provider=None, llm=None):
+        import config
         self.researcher = researcher            # reused for its evidence-gathering
-        self.model = model
-        if client is None:
-            from anthropic import AsyncAnthropic
-            client = AsyncAnthropic()
-        self.client = client
+        self.model = model or config.VERIFY_MODEL
+        self.llm = llm or LLM(self.model, provider)
         self.fetcher = DocsFetcher()
 
     async def verify(self, app_meta: dict, result: AppResult) -> AppResult:
         docs = await self.researcher._gather(app_meta)
         prior = {k: result.val(k) for k in GRADED}
 
-        msg = await self.client.messages.create(
-            model=self.model, max_tokens=1500, system=VERIFY_SYSTEM,
-            tools=[EMIT_VERDICTS], tool_choice={"type": "tool", "name": "emit_verdicts"},
-            messages=[{"role": "user", "content": VERIFY_USER.format(
-                name=result.name, category=result.category,
-                prior=json.dumps(prior, ensure_ascii=False),
-                context=self.researcher._context(docs))}],
+        import json
+        out = await self.llm.structured(
+            system=VERIFY_SYSTEM,
+            user=VERIFY_USER.format(name=result.name, category=result.category,
+                                    prior=json.dumps(prior, ensure_ascii=False),
+                                    context=self.researcher._context(docs)),
+            tool_name="emit_verdicts", tool_desc=EMIT_VERDICTS["description"],
+            schema=EMIT_VERDICTS["input_schema"], max_tokens=1500,
         )
-        verdicts = next(b.input for b in msg.content
-                        if getattr(b, "type", None) == "tool_use")["verdicts"]
+        verdicts = out.get("verdicts", {})
 
         for k in GRADED:
             v = verdicts.get(k) or {}

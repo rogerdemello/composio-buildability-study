@@ -1,11 +1,13 @@
 # Research agent runtime
-anthropic>=0.40.0
 httpx>=0.27.0
 python-dotenv>=1.0.0
 
+# LLM backends (pick one via LLM_PROVIDER; default = nvidia)
+openai>=1.40.0            # NVIDIA NIM is OpenAI-compatible (default backend)
+anthropic>=0.40.0         # optional: LLM_PROVIDER=anthropic
+
 # Composio SDK — used to power the researcher with Composio's own search tools
 composio>=0.7.0
-composio_anthropic>=0.7.0
 
 # Optional providers (pipeline degrades gracefully if absent / no key)
 #   tavily + firecrawl are called over HTTP via httpx (no extra dep needed)

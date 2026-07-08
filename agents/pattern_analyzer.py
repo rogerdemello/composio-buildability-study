@@ -7,6 +7,7 @@ from __future__ import annotations
 import collections
 import json
 
+from llm import LLM
 from models.result import ResearchRun
 from prompts import PATTERN_SYSTEM, PATTERN_USER
 
@@ -50,12 +51,10 @@ def compute_counts(run: ResearchRun) -> dict:
 
 
 class PatternAnalyzer:
-    def __init__(self, model="claude-opus-4-8", client=None):
-        self.model = model
-        if client is None:
-            from anthropic import AsyncAnthropic
-            client = AsyncAnthropic()
-        self.client = client
+    def __init__(self, model=None, provider=None, llm=None):
+        import config
+        self.model = model or config.PATTERN_MODEL
+        self.llm = llm or LLM(self.model, provider)
 
     async def analyze(self, run: ResearchRun) -> dict:
         counts = compute_counts(run)
@@ -64,13 +63,12 @@ class PatternAnalyzer:
                  "api": a.val("api_surface"), "mcp": a.val("has_mcp"),
                  "composio": a.val("composio_toolkit"), "score": a.buildability_score}
                 for a in run.apps]
-        msg = await self.client.messages.create(
-            model=self.model, max_tokens=2500, system=PATTERN_SYSTEM,
-            tools=[EMIT_PATTERNS], tool_choice={"type": "tool", "name": "emit_patterns"},
-            messages=[{"role": "user", "content": PATTERN_USER.format(
-                counts=json.dumps(counts, ensure_ascii=False),
-                rows=json.dumps(rows, ensure_ascii=False))}],
+        patterns = await self.llm.structured(
+            system=PATTERN_SYSTEM,
+            user=PATTERN_USER.format(counts=json.dumps(counts, ensure_ascii=False),
+                                     rows=json.dumps(rows, ensure_ascii=False)),
+            tool_name="emit_patterns", tool_desc=EMIT_PATTERNS["description"],
+            schema=EMIT_PATTERNS["input_schema"], max_tokens=2500,
         )
-        patterns = next(b.input for b in msg.content if getattr(b, "type", None) == "tool_use")
         patterns["counts"] = counts
         return patterns
